@@ -1,0 +1,4 @@
+# Ficheros autogenerados
+activate/
+migrations/
+**/__pycache__
