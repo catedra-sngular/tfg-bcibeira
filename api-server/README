@@ -1,0 +1,62 @@
+### Instalación necesaria
+pip install virtualenv
+pip install flask flask_restful flask_sqlalchemy flask_migrate flask_marshmallow marshmallow-sqlalchemy
+
+### Arrancar entorno virtual
+cd tfg-bcibeira/api-server
+source env/bin/activate
+deactivate
+
+### Crear BD
+flask db init
+flask db migrate -m "Initial_db"
+flask db upgrade
+
+### Arrancamos API
+flask run
+
+
+###########################################
+###	  PETICIONS RECOMENDADAS        ###
+###########################################
+
+# Obter usuarios
+  # GET
+    http://localhost:5000/api/v1.0/users/
+  #
+
+# Crear usuario
+  # POST
+    http://localhost:5000/api/v1.0/users/
+    # BODY (JSON)
+      {
+          "name": "manolo"
+      }
+    #
+  #
+
+# Obter colas
+  # GET
+    http://localhost:5000/api/v1.0/queues/
+  #
+
+# Crear cola
+  # POST
+    http://localhost:5000/api/v1.0/queues/
+    # BODY (JSON)
+      {
+          "name": "output-1234",
+          "user": 1
+      }
+    #
+  #
+
+# Obter cola
+  # GET
+    http://localhost:5000/api/v1.0/queues/{IdCola}
+  #
+
+# Borrar cola
+  # DELETE
+    http://localhost:5000/api/v1.0/queues/{IdCola}
+  #
