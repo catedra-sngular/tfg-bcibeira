@@ -3,11 +3,15 @@ from marshmallow import fields
 from app.ext import ma
 
 class QueueSchema(ma.Schema):
-    id = fields.Integer(dump_only=True)
     name = fields.String()
-    user = fields.Int()
+    # user = fields.String()
+    #data = fields.String()
+
+class QueuesMessagesSchema(ma.Schema):
+    queueSource = fields.String()
+    queueDestination = fields.String()
+    data = fields.String()
 
 
 class UserSchema(ma.Schema):
-    id = fields.Integer(dump_only=True)
     name = fields.String()
