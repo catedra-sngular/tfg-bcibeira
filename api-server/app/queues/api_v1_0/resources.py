@@ -3,7 +3,6 @@ from flask_restful import Api, Resource
 
 from app.common.error_handling import ObjectNotFound
 from .schemas import QueueSchema, QueuesMessagesSchema
-from subprocess import run
 import pika
 
 queues_v1_0_bp = Blueprint('queues_v1_0_bp', __name__)
@@ -20,18 +19,6 @@ parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentia
 
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
-
-# class UserListResource(Resource):
-#     def post(self):
-#         data = request.get_json()
-#         queue_dict = queue_schema.load(data)
-#         username = queue_dict['name']
-#         try:
-#             run(['rabbitmqctl set_permissions -p su2', username, "'' 'input' 'output.*'"])
-#         except:
-#             return 'Usuario existente', 409
-#         resp = queue_dict
-#         return resp, 201
 
 class TestResource(Resource):
     def get(self):
@@ -71,9 +58,6 @@ class QueuesMessagesResource(Resource):
             return 'Cola existente', 409
         return mssg_dict, 200
 
-
-# api.add_resource(UserListResource, '/api/v1.0/users/', endpoint='user_list_resource')
-# api.add_resource(QueueResource, '/api/v1.0/queues/<string:queueName>', endpoint='queue_resource')
 api.add_resource(QueuesResource, '/api/v1.0/queues/', endpoint='queues_resource')
 api.add_resource(QueuesMessagesResource, '/api/v1.0/queues/write/', endpoint='queues_messages_resource')
 api.add_resource(TestResource, '/api/v1.0/test/', endpoint='test_resource')
