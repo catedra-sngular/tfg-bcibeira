@@ -11,4 +11,5 @@ flask run
 
 Paso 3. Lanzar o frontal
 cd ../sugus
+npm i
 npm start
