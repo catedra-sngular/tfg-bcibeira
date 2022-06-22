@@ -1,0 +1,9 @@
+virtualenv
+flask
+flask_restful
+flask_sqlalchemy
+flask_migrate
+flask_marshmallow
+flask_cors
+marshmallow-sqlalchemy
+pika
