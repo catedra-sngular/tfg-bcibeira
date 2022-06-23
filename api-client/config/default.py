@@ -1,0 +1,5 @@
+SECRET_KEY = 'YgqDOU^3^VLz#iOx5G#g&3aENqVdYx#Z^yKb8yq$1xFHZqre4#'
+
+PROPAGATE_EXCEPTIONS = True
+
+ERROR_404_HELP = False
