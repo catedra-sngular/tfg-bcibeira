@@ -1,0 +1,16 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./api-server/Dockerfile
+    command: flask run --host=0.0.0.0
+    ports:
+      - "50000:5000"
+  rabbit:
+    build:
+      context: .
+      dockerfile: ./rabbit/Dockerfile
+    command: ./init.sh
+    ports:
+      - "15672:5672"

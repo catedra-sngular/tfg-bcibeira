@@ -6,3 +6,9 @@ class ConnSchema(ma.Schema):
     dir = fields.String()
     user = fields.String()
     passwd = fields.String()
+
+class FileSchema(ma.Schema):
+    # localDir = fields.String()
+    # remoteName = fields.String()
+    data = fields.String()
+    # fileName = fields.String()
