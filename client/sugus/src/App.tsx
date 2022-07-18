@@ -14,21 +14,13 @@ function App() {
     const [response, setResponse] = React.useState('');
     const [user, setUser] = React.useState('');
     const [passwd, setPasswd] = React.useState('');
-
-    // const getMssg = () => {
-    //     console.log('hola');
-    //     axios
-    //         .get(`http://localhost:27000/api/v1.0/test/`)
-    //         .then((res) => {
-    //             setResponse(res.data as string);
-    //         })
-    //         .catch((error) => console.log(error));
-    // };
+    const [dir, setDir] = React.useState('');
+    const [file, setFile] = React.useState<File>();
 
     const getMssg = () => {
         console.log('hola');
         axios
-            .get(`http://localhost:5000/api/v1.0/test/`)
+            .get(`http://localhost:8090/api/v1.0/test/`)
             .then((res) => {
                 setResponse(res.data as string);
             })
@@ -37,19 +29,65 @@ function App() {
 
     const connection = (type: ConnType) => {
         axios
-            .post('http://localhost:5000/api/v1.0/test/', {
+            .post('http://localhost:8090/api/v1.0/test/', {
                 connType: type,
-                dir: 'localhost',
+                dir: dir,
                 user: user,
                 passwd: passwd,
             })
             .then(function (response) {
-                console.log('connection created');
+                const messg = type ? 'connection created' : 'disconnected';
+                console.log(messg);
             })
             .catch(function (error) {
                 console.log('connection error');
             });
     };
+
+    const sendFile = () => {
+        if (file) {
+            const formData = new FormData();
+
+            // Update the formData object
+            formData.append('configFile', file, file?.name);
+
+            // Details of the uploaded file
+            console.log(file);
+            console.log(JSON.stringify(Object.fromEntries(formData)));
+
+            axios
+                .post('http://localhost:8090/api/v1.0/file/', formData)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+    };
+
+    const loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setFile(event.target.files[0]);
+        }
+        // const file = event.target.files?.item(0);
+        // if (file) {
+        //     const name = event.target.value.split('/').pop() as string;
+        //     setFile(file);
+        //     setFileName(name);
+        // }
+    };
+
+    // const loadText = (f: File | null | undefined) => {
+    //     if (f) {
+    //         f.text()
+    //             .then((text) => {
+    //                 console.log(text);
+    //                 return text;
+    //             })
+    //             .catch((e) => console.log(e));
+    //     }
+    // };
 
     return (
         <div className='App'>
@@ -72,7 +110,17 @@ function App() {
                             setPasswd(value);
                         }}
                     ></CustomTextfield>
+                    <CustomTextfield
+                        label='Direction'
+                        placeholder='Escribe aquí'
+                        onChangeInput={(value) => {
+                            setDir(value);
+                        }}
+                    ></CustomTextfield>
                 </div>
+
+                <input type='file' onChange={loadFile} />
+
                 <ButtonPrimary
                     icon='filter_list'
                     iconFirst={true}
@@ -101,6 +149,14 @@ function App() {
                             setResponse('');
                         }, 5000);
                         getMssg();
+                    }}
+                ></ButtonPrimary>
+                <ButtonPrimary
+                    icon='send'
+                    iconFirst={true}
+                    label='SendFile'
+                    click={() => {
+                        sendFile();
                     }}
                 ></ButtonPrimary>
                 {response && <pre>{response}</pre>}
