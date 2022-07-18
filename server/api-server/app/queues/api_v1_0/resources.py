@@ -1,7 +1,6 @@
 from flask import request, Blueprint
 from flask_restful import Api, Resource
 
-from app.common.error_handling import ObjectNotFound
 from .schemas import QueueSchema, QueuesMessagesSchema
 import pika
 
@@ -11,14 +10,34 @@ queue_schema = QueueSchema()
 mssg_schema = QueuesMessagesSchema()
 
 credentials = pika.PlainCredentials('manager', 'manager')
-# Local
-parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
-# Server
-# parameters = pika.ConnectionParameters('localhost', 5672, 'su2', credentials)
+# VM
+# parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
+# DOCKER
+parameters = pika.ConnectionParameters('rabbit', 5672, 'su2', credentials) # heartbeat=0 para evitar timeout
 
+connection = None
+channel = None
 
-connection = pika.BlockingConnection(parameters)
-channel = connection.channel()
+def setUp():
+  channel.exchange_declare('input')
+  channel.queue_declare(queue='input')
+  channel.queue_bind(exchange='input', queue='input', routing_key='input')
+  channel.exchange_declare(exchange='output-')
+
+  print('Creado intercambio de entrada (input)')
+  print('Creada cola de entrada (input)')
+  print('Creado intercambio de salida (output)')
+
+def connect(self):
+    global connection, channel
+    connection = pika.BlockingConnection(parameters)
+    channel = connection.channel()
+    setUp()
+
+class ConnectionResource(Resource):
+    def get(self):
+        connect(channel)
+        return 200
 
 class TestResource(Resource):
     def get(self):
@@ -35,7 +54,10 @@ class QueuesResource(Resource):
             channel.queue_delete(queue=queueName)
             print(f'Cola de salida {queueName} eliminada')
         except:
-            return 'La cola no existe', 404
+            if channel:
+                return 'La cola no existe', 404
+            else:
+                return 'No se ha realizado la conexión previamente', 500
         return queue_dict, 201
 
     def post(self):
@@ -47,7 +69,10 @@ class QueuesResource(Resource):
             channel.queue_bind(exchange='output-', queue=queueName, routing_key=queueName)
             print(f'Cola de entrada {queueName} creada')
         except:
-            return 'Cola existente', 409
+            if channel:
+                return 'Cola existente', 409
+            else:
+                return 'No se ha realizado la conexión previamente', 500
         return queue_dict, 201
 
 ## Paso de mensajes
@@ -60,17 +85,21 @@ class QueuesMessagesResource(Resource):
         try:
             channel.basic_publish(exchange=exchange, routing_key=destination, body=mssg_dict)
         except:
-            return 'Cola existente', 409
+            if channel:
+                return 'Cola existente', 409
+            else:
+                return 'No se ha realizado la conexión previamente', 500
         return mssg_dict, 200
 
-class FileResource(Resource):
-    def post(self):
-        print('hola')
-        print(request)
-        print(request.files['configFile'].read())
-        return 200
+# class FileResource(Resource):
+#     def post(self):
+#         print('hola')
+#         print(request)
+#         print(request.files['configFile'].read())
+#         return 200
 
+api.add_resource(ConnectionResource, '/api/v1.0/connection/', endpoint='connection_resource')
 api.add_resource(QueuesResource, '/api/v1.0/queues/', endpoint='queues_resource')
 api.add_resource(QueuesMessagesResource, '/api/v1.0/queues/write/', endpoint='queues_messages_resource')
 api.add_resource(TestResource, '/api/v1.0/test/', endpoint='test_resource')
-api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')
+# api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')

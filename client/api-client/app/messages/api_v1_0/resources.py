@@ -13,36 +13,22 @@ file_schema = FileSchema()
 # Inicia un cliente SSH
 ssh_client = paramiko.SSHClient()
 
-# credentials = pika.PlainCredentials('manager', 'manager')
-# # Local
-# parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
-# # Server
-# # parameters = pika.ConnectionParameters('localhost', 5672, 'su2', credentials)
-
-
-# connection = pika.BlockingConnection(parameters)
-# channel = connection.channel()
-
 def openConn(params):
-    print('hola api')
     # Establecer política por defecto para localizar la llave del host localmente
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     # Conectarse
     ssh_client.connect(params['dir'], 22, params['user'], params['passwd'])
-    ssh_client.exec_command('mkdir resources')
 
 def closeConn():
     if ssh_client:
-        print('agur api')
         # Cerrar la conexión
         ssh_client.close()
 
 def testServerAPI():
     # Ejecutar un comando de forma remota capturando entrada, salida y error estándar
-    entrada, salida, error = ssh_client.exec_command('curl http://localhost:27000/api/v1.0/test/')
-    # Mostrar la salida estándar en pantalla
+    entrada, salida, error = ssh_client.exec_command('curl http://localhost:50000/api/v1.0/test/')
+    # Guardar la salida estándar
     output = salida.read().decode('unicode-escape')
-    print('rec server: ', output)
     return output
 
 # def sendConfigFile(params):
@@ -56,7 +42,7 @@ def testServerAPI():
 #     sftp.put(params['localDir'],f'/home/bcibeira/resources/conf.cfg')
 
 def sendConfigFile(file):
-    command = 'curl -X POST -H "Content-Type: application/json" -d "{"file": "aaa"}" http://localhost:27000/api/v1.0/file'
+    command = 'curl -X POST -H "Content-Type: application/json" -d "{"file": "aaa"}" http://localhost:50000/api/v1.0/file'
     print(command)
     # Ejecutar un comando de forma remota capturando entrada, salida y error estándar
     entrada, salida, error = ssh_client.exec_command(command)
@@ -98,4 +84,4 @@ class FileResource(Resource):
         return 200
 
 api.add_resource(TestResource, '/api/v1.0/test/', endpoint='test_resource')
-api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')
+# api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')

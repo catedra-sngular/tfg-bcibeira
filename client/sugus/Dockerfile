@@ -1,8 +1,17 @@
-FROM node:16.16.0-alpine3.16
-COPY ./sugus .
+FROM nginx
+WORKDIR /usr/share/share
 
-# add `/app/node_modules/.bin` to $PATH
-ENV PATH /app/node_modules/.bin:$PATH
+RUN curl -fsSL https://deb.nodesource.com/setup_17.x | bash -
+RUN apt-get install -y nodejs
 
-RUN npm install --silent
-RUN npm install react-scripts@3.4.1 -g --silent
+COPY sugus/package.json ./
+
+RUN npm install
+
+COPY sugus/ ./
+
+RUN npm run build
+
+RUN rm -r /usr/share/nginx/html/*
+
+RUN cp -a build/. /usr/share/nginx/html

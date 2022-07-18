@@ -20,7 +20,7 @@ function App() {
     const getMssg = () => {
         console.log('hola');
         axios
-            .get(`http://localhost:5000/api/v1.0/test/`)
+            .get(`http://localhost:8090/api/v1.0/test/`)
             .then((res) => {
                 setResponse(res.data as string);
             })
@@ -29,7 +29,7 @@ function App() {
 
     const connection = (type: ConnType) => {
         axios
-            .post('http://localhost:5000/api/v1.0/test/', {
+            .post('http://localhost:8090/api/v1.0/test/', {
                 connType: type,
                 dir: dir,
                 user: user,
@@ -56,7 +56,7 @@ function App() {
             console.log(JSON.stringify(Object.fromEntries(formData)));
 
             axios
-                .post('http://localhost:5000/api/v1.0/file/', formData)
+                .post('http://localhost:8090/api/v1.0/file/', formData)
                 .then(function (response) {
                     console.log(response);
                 })
@@ -78,16 +78,16 @@ function App() {
         // }
     };
 
-    const loadText = (f: File | null | undefined) => {
-        if (f) {
-            f.text()
-                .then((text) => {
-                    console.log(text);
-                    return text;
-                })
-                .catch((e) => console.log(e));
-        }
-    };
+    // const loadText = (f: File | null | undefined) => {
+    //     if (f) {
+    //         f.text()
+    //             .then((text) => {
+    //                 console.log(text);
+    //                 return text;
+    //             })
+    //             .catch((e) => console.log(e));
+    //     }
+    // };
 
     return (
         <div className='App'>

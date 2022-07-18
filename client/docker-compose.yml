@@ -12,7 +12,5 @@ services:
     build:
       context: .
       dockerfile: ./sugus/Dockerfile
-    command: npm start
     ports:
-      - "8080:3000"
-
+      - "8080:80"
