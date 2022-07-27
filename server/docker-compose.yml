@@ -18,15 +18,17 @@ services:
       - "15672:5672"
     healthcheck:
       test: rabbitmq-diagnostics -q ping
-      interval: 30s
+      interval: 5s
       timeout: 30s
-      retries: 3
+      retries: 5
 
   daemon:
     build:
       context: .
       dockerfile: ./daemon/Dockerfile
-    command: python listener.py
+    command: >
+      sh -c "mkfifo /hostpipe/workerpipe &&
+             python listener.py"
     volumes:
       - ./pipe:/hostpipe
     depends_on:

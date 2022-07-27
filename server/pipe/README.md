@@ -1,0 +1,2 @@
+### Que é o directorio /pipe?  
+/pipe é un directorio no que será almacenado unha arquivo que contén unha cola FIFO o cal será leído continuamente executando o comando 'while true; do eval "$(cat /path/to/pipe/mypipe)"; done' e será a canle de comunicación con SU2.
