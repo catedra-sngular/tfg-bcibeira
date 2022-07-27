@@ -20,7 +20,7 @@ function App() {
     const getMssg = () => {
         console.log('hola');
         axios
-            .get(`http://localhost:8090/api/v1.0/test/`)
+            .get(`https://lem0n.corunet.com/api/v1.0/test/`)
             .then((res) => {
                 setResponse(res.data as string);
             })
@@ -29,7 +29,7 @@ function App() {
 
     const connection = (type: ConnType) => {
         axios
-            .post('http://localhost:8090/api/v1.0/test/', {
+            .post('https://lem0n.corunet.com/api/v1.0/test/', {
                 connType: type,
                 dir: dir,
                 user: user,
@@ -56,7 +56,7 @@ function App() {
             console.log(JSON.stringify(Object.fromEntries(formData)));
 
             axios
-                .post('http://localhost:8090/api/v1.0/file/', formData)
+                .post('https://lem0n.corunet.com/api/v1.0/file/', formData)
                 .then(function (response) {
                     console.log(response);
                 })
@@ -119,7 +119,7 @@ function App() {
                     ></CustomTextfield>
                 </div>
 
-                <input type='file' onChange={loadFile} />
+                {/* <input type='file' onChange={loadFile} /> */}
 
                 <ButtonPrimary
                     icon='filter_list'
@@ -151,14 +151,14 @@ function App() {
                         getMssg();
                     }}
                 ></ButtonPrimary>
-                <ButtonPrimary
+                {/* <ButtonPrimary
                     icon='send'
                     iconFirst={true}
                     label='SendFile'
                     click={() => {
                         sendFile();
                     }}
-                ></ButtonPrimary>
+                ></ButtonPrimary> */}
                 {response && <pre>{response}</pre>}
             </header>
         </div>
