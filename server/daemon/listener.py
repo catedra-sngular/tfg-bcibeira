@@ -3,7 +3,8 @@ from random import randint
 from subprocess import run
 import pika, sys, os, time
 
-cred = pika.PlainCredentials('manager', 'manager')
+manager_psswd = os.environ.get('MANAGER_PSSWD')
+cred = pika.PlainCredentials('manager', manager_psswd)
 # VM
 # parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
 # DOCKER
@@ -35,7 +36,8 @@ def callback(ch, method, properties, body):
     f.close()
 
 try:
-  credentials = pika.PlainCredentials('server', 'server')
+  server_psswd = os.environ.get('SERVER_PSSWD')
+  credentials = pika.PlainCredentials('server', server_psswd)
   parameters = pika.ConnectionParameters('rabbit',
                                           5672,
                                           'su2',

@@ -2,14 +2,15 @@ from flask import request, Blueprint
 from flask_restful import Api, Resource
 
 from .schemas import QueueSchema, QueuesMessagesSchema
-import pika
+import pika, os
 
 queues_v1_0_bp = Blueprint('queues_v1_0_bp', __name__)
 api = Api(queues_v1_0_bp)
 queue_schema = QueueSchema()
 mssg_schema = QueuesMessagesSchema()
 
-credentials = pika.PlainCredentials('manager', 'manager')
+manager_psswd = os.environ.get('MANAGER_PSSWD')
+credentials = pika.PlainCredentials('manager', manager_psswd)
 # VM
 # parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
 # DOCKER
