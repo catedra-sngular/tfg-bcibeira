@@ -1,4 +1,5 @@
-version: "3"
+version: "3.9"
+
 services:
   app:
     build:
@@ -15,3 +16,21 @@ services:
     command: ./init.sh
     ports:
       - "15672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+  daemon:
+    build:
+      context: .
+      dockerfile: ./daemon/Dockerfile
+    command: >
+      sh -c "mkfifo /hostpipe/workerpipe &&
+             python listener.py"
+    volumes:
+      - ./pipe:/hostpipe
+    depends_on:
+      rabbit:
+        condition: service_healthy
