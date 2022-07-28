@@ -18,7 +18,6 @@ function App() {
     const [file, setFile] = React.useState<File>();
 
     const getMssg = () => {
-        console.log('hola');
         axios
             .get(`https://lem0n.corunet.com/api/v1.0/test/`)
             .then((res) => {
