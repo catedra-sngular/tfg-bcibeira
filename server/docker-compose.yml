@@ -27,8 +27,12 @@ services:
       context: .
       dockerfile: ./daemon/Dockerfile
     command: >
-      sh -c "mkfifo /hostpipe/workerpipe &&
-             python listener.py"
+      sh -c "
+          if ! [ -p hostpipe/workerpipe ];
+            then mkfifo /hostpipe/workerpipe ;
+          fi &&
+          python listener.py
+      "
     volumes:
       - ./pipe:/hostpipe
     depends_on:
