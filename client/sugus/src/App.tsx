@@ -16,10 +16,11 @@ function App() {
     const [passwd, setPasswd] = React.useState('');
     const [dir, setDir] = React.useState('');
     const [file, setFile] = React.useState<File>();
+    const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
     const getMssg = () => {
         axios
-            .get(`https://lem0n.corunet.com/api/v1.0/test/`)
+            .get(apiUrl + '/api/v1.0/test/')
             .then((res) => {
                 setResponse(res.data as string);
             })
@@ -28,7 +29,7 @@ function App() {
 
     const connection = (type: ConnType) => {
         axios
-            .post('https://lem0n.corunet.com/api/v1.0/test/', {
+            .post(apiUrl + '/api/v1.0/test/', {
                 connType: type,
                 dir: dir,
                 user: user,
@@ -55,7 +56,7 @@ function App() {
             console.log(JSON.stringify(Object.fromEntries(formData)));
 
             axios
-                .post('https://lem0n.corunet.com/api/v1.0/file/', formData)
+                .post(apiUrl + '/api/v1.0/file/', formData)
                 .then(function (response) {
                     console.log(response);
                 })
