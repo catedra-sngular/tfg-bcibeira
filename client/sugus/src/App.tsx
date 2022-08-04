@@ -15,7 +15,8 @@ function App() {
     const [user, setUser] = React.useState('');
     const [passwd, setPasswd] = React.useState('');
     const [dir, setDir] = React.useState('');
-    const [file, setFile] = React.useState<File>();
+    const [configFile, setConfigFile] = React.useState<File>();
+    const [meshFile, setMeshFile] = React.useState<File>();
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
     const getMssg = () => {
@@ -45,14 +46,21 @@ function App() {
     };
 
     const sendFile = () => {
-        if (file) {
+        if (configFile && meshFile) {
             const formData = new FormData();
 
             // Update the formData object
-            formData.append('configFile', file, file?.name);
+            formData.append('configFile', configFile, configFile?.name);
 
             // Details of the uploaded file
-            console.log(file);
+            console.log(configFile);
+            console.log(JSON.stringify(Object.fromEntries(formData)));
+
+            // Update the formData object
+            formData.append('meshFile', meshFile, meshFile?.name);
+
+            // Details of the uploaded file
+            console.log(configFile);
             console.log(JSON.stringify(Object.fromEntries(formData)));
 
             axios
@@ -66,28 +74,15 @@ function App() {
         }
     };
 
-    const loadFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const loadFile = (event: React.ChangeEvent<HTMLInputElement>, type: number) => {
         if (event.target.files) {
-            setFile(event.target.files[0]);
+            if (type) {
+                setMeshFile(event.target.files[0]);
+            } else {
+                setConfigFile(event.target.files[0]);
+            }
         }
-        // const file = event.target.files?.item(0);
-        // if (file) {
-        //     const name = event.target.value.split('/').pop() as string;
-        //     setFile(file);
-        //     setFileName(name);
-        // }
     };
-
-    // const loadText = (f: File | null | undefined) => {
-    //     if (f) {
-    //         f.text()
-    //             .then((text) => {
-    //                 console.log(text);
-    //                 return text;
-    //             })
-    //             .catch((e) => console.log(e));
-    //     }
-    // };
 
     return (
         <div className='App'>
@@ -119,7 +114,14 @@ function App() {
                     ></CustomTextfield>
                 </div>
 
-                {/* <input type='file' onChange={loadFile} /> */}
+                <div>
+                    <label>Config File </label>
+                    <input type='file' onChange={(e) => loadFile(e, 0)} />
+                </div>
+                <div>
+                    <label>Mesh File </label>
+                    <input type='file' onChange={(e) => loadFile(e, 1)} />
+                </div>
 
                 <ButtonPrimary
                     icon='filter_list'
@@ -151,14 +153,14 @@ function App() {
                         getMssg();
                     }}
                 ></ButtonPrimary>
-                {/* <ButtonPrimary
+                <ButtonPrimary
                     icon='send'
                     iconFirst={true}
                     label='SendFile'
                     click={() => {
                         sendFile();
                     }}
-                ></ButtonPrimary> */}
+                ></ButtonPrimary>
                 {response && <pre>{response}</pre>}
             </header>
         </div>
