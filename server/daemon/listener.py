@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-from random import randint
-from subprocess import run
-import pika, sys, os, time
+import pika, sys, os, time, json
 
 manager_psswd = os.environ.get('MANAGER_PSSWD')
 cred = pika.PlainCredentials('manager', manager_psswd)
@@ -29,27 +27,26 @@ def connect():
     chann = conn.channel()
     setUp()
 
-def callback(ch, method, properties, body):
-    print(f" Jelouu ")
-    f = open("/hostpipe/workerpipe", "a")
-    f.write("touch this_file_was_created_on_main_host_from_a_container.txt")
-    f.close()
+def callback(ch, method, properties, data):
+    body = json.loads(data)
+
+    if body['type'] == 'run':
+        binary = os.environ.get('BINARY')
+
+        f = open("/hostpipe/workerpipe", "a")
+        f.write(f"cd resources/{body['folder']} && {binary} {body['file']} && cd ../..") # cd r>
+        f.close()
 
 try:
   server_psswd = os.environ.get('SERVER_PSSWD')
   credentials = pika.PlainCredentials('server', server_psswd)
-  parameters = pika.ConnectionParameters('rabbit',
-                                          5672,
-                                          'su2',
-                                          credentials)
-  time.sleep(10)
+  parameters = pika.ConnectionParameters('rabbit', 5672, 'su2', credentials, heartbeat=0)
   connect()
   connection = pika.BlockingConnection(parameters)
 
   channel = connection.channel()
   channel.exchange_declare('input', passive=True)
   channel.queue_declare('input', passive=True)
-
   channel.basic_consume('input', on_message_callback=callback, auto_ack=True)
   print(' [*] Waiting for files. To exit press CTRL+C')
   channel.start_consuming()

@@ -4,3 +4,4 @@ RUN pip install -r requirements.txt
 VOLUME /hostpipe
 ENV MANAGER_PSSWD="manager"
 ENV SERVER_PSSWD="server"
+ENV BINARY="/usr/local/bin/SU2_CFD"
