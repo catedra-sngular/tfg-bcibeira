@@ -30,18 +30,26 @@ def connect():
 
 def send(queue, folder, time):
     sleep(time)
-    file = open(f'/hostpipe/resources/{folder}history.csv', 'r')
-    while True:
-        sleep(time)
-        data = file.read()
-        if data == '':
-            break
+    path = f'/hostpipe/resources/{folder}history.csv'
+    ch = connection.channel()
+    ch.exchange_declare('output-', passive=True)
+
+    if not os.path.exists(path):
         response = {
-            "data": data,
+            "data": None,
         }
-        ch = connection.channel()
-        ch.exchange_declare('output-', passive=True)
         ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
+    else:
+        file = open(path, 'r')
+        while True:
+            sleep(time)
+            data = file.read()
+            if data == '':
+                break
+            response = {
+                "data": data,
+            }
+            ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
 
 def callback(ch, method, properties, data):
     body = json.loads(data)
