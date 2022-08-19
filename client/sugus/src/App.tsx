@@ -1,9 +1,9 @@
 import './App.scss';
 import axios from 'axios';
 import { tap } from 'rxjs';
-import Button from 'react-bootstrap/Button';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+// import './bootstrap_variables.scss';
+// import 'bootstrap/scss/bootstrap.scss';
 import { WizardSection } from './interfaces/wizard-section';
 import { useEffect, useRef, useState } from 'react';
 import { Wizard } from './components/wizard/wizard';
@@ -16,7 +16,11 @@ import {
 } from './interfaces/wizard-section-summary';
 import { Question } from './interfaces/question';
 import { getSection, getSectionSummary } from './mocks/questions.mock';
-import { Modal } from 'react-bootstrap';
+import { Container, Modal, Button, Navbar, Nav, Carousel, Dropdown } from 'react-bootstrap';
+import { Link, Outlet } from 'react-router-dom';
+import { NavigationBar } from './components/common/navigation-bar/navigation-bar';
+import { Slider } from './components/common/slider/slider';
+import { Footer } from './components/common/footer/footer';
 
 enum ConnType {
     CLOSE = 0,
@@ -45,6 +49,7 @@ function App() {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [delay, setDelay] = useState<string>();
     const [execution, setExecution] = useState<string>();
+    const [table, setTable] = useState<JSX.Element>();
 
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
     const hiddenMeshFileInputRef = useRef<HTMLInputElement>(null);
@@ -203,23 +208,14 @@ function App() {
             // Update the formData object
             formData.append('configFile', configFile, configFile?.name);
 
-            // Details of the uploaded file
-            console.log(configFile);
-            console.log(JSON.stringify(Object.fromEntries(formData)));
-
             // Update the formData object
             formData.append('meshFile', meshFile, meshFile?.name);
-
-            // Details of the uploaded file
-            console.log(configFile);
-            console.log(JSON.stringify(Object.fromEntries(formData)));
 
             axios
                 .post(apiUrl + '/api/v1.0/file/', formData)
                 .then(function (response) {
-                    console.log(response.data);
-                    console.log(JSON.stringify(response.data));
                     setExecution(response.data as string);
+                    setTable(loadTable());
                     setShowModal(true);
                 })
                 .catch(function (error) {
@@ -230,7 +226,7 @@ function App() {
 
     const parseExecution = () => {
         if (execution) {
-            const message = execution.replace('/n', '\n');
+            const message = execution.trim().split(',');
             return message;
         }
     };
@@ -295,295 +291,364 @@ function App() {
         );
     };
 
+    const loadTable = () => {
+        const items = parseExecution() || [];
+        const columns = 7;
+        const header = [];
+        const body = [];
+        let iterator = 0;
+
+        for (iterator; iterator < columns; iterator++) {
+            console.log(iterator, items[iterator]);
+            if (items[iterator]) {
+                header.push(<th scope='col'>{items[iterator].trim()}</th>);
+            }
+        }
+        for (iterator; iterator < items.length; iterator += columns) {
+            const data = [];
+            for (let i = 0; iterator + i < items.length; i++) {
+                console.log(iterator + i, items[iterator + i]);
+                data.push(<td>{items[iterator + i].trim()}</td>);
+            }
+            body.push(
+                <tr>
+                    <th scope='row'>{iterator / columns}</th>
+                    {data}
+                </tr>,
+            );
+        }
+        console.log(header);
+        console.log(body);
+
+        return (
+            <table className='table'>
+                <thead>
+                    <tr>{header}</tr>
+                </thead>
+                <tbody>{body}</tbody>
+            </table>
+        );
+    };
+
     return (
-        <div className='container'>
-            <div className='wizard_container'>
-                {loadingQuestions && (
-                    <div className='loading-questions-wrapper'>
-                        <div className='loading-questions-container'>
-                            <img alt='loading' src='/assets/loading.gif'></img>
-                            <p>Loading questions</p>
+        <>
+            <div className='greeting'>
+                <h1>Welcome to Su2uS</h1>
+
+                <p>We help you to manage SU2 config files</p>
+                <p>Optionaly you can send it to a server and wait for receiving reponses</p>
+            </div>
+
+            <Slider></Slider>
+            {/* <div className='container'>
+                <div className='wizard_container'>
+                    {loadingQuestions && (
+                        <div className='loading-questions-wrapper'>
+                            <div className='loading-questions-container'>
+                                <img alt='loading' src='/assets/loading.gif'></img>
+                                <p>Loading questions</p>
+                            </div>
                         </div>
-                    </div>
-                )}
-                {!section && (
-                    <>
-                        <h1>Welcome to Su2uS</h1>
-                        {(serverSelected || wizardSelected) && (
-                            <p>
-                                <Button variant='dark' onClick={handleBackToWelcomePage}>
-                                    Back to HOME
-                                </Button>
-                            </p>
-                        )}
-                        {!serverSelected && (
-                            <>
+                    )}
+                    {!section && (
+                        <>
+                            <h1>Welcome to Su2uS</h1>
+                            {(serverSelected || wizardSelected) && (
                                 <p>
-                                    This wizard will guide you through hundreds of possible options,
-                                    so you can easily create your configuration file for su2
+                                    <Button variant='dark' onClick={handleBackToWelcomePage}>
+                                        Back to HOME
+                                    </Button>
                                 </p>
-                                <div className='my-3 files-selector d-flex flex-row'>
-                                    <span className='d-flex flex-column-reverse'>
-                                        <Button onClick={handleStartButton}>
-                                            Start new config
-                                        </Button>
-                                    </span>
-                                    <span className='mx-4 d-flex flex-column-reverse'>
-                                        <input
-                                            ref={hiddenConfigFileInputRef}
-                                            className='hide_input_file'
-                                            type='file'
-                                            name='file'
-                                            onChange={(event) => {
-                                                if (event.target.files) {
-                                                    setConfigFile(event.target?.files[0]);
-                                                }
-                                            }}
-                                        ></input>
-
-                                        <span>
-                                            <Button
-                                                variant={configFile ? 'success' : 'secondary'}
-                                                onClick={() => {
-                                                    setWizardSelected(true);
-                                                    handleSelectConfigFile(
-                                                        hiddenConfigFileInputRef,
-                                                    );
-                                                }}
-                                            >
-                                                {configFile
-                                                    ? 'Select another config file'
-                                                    : 'Select config file'}
+                            )}
+                            {!serverSelected && (
+                                <>
+                                    <p>
+                                        This wizard will guide you through hundreds of possible
+                                        options, so you can easily create your configuration file
+                                        for su2
+                                    </p>
+                                    <div className='my-3 files-selector d-flex flex-row'>
+                                        <span className='d-flex flex-column-reverse'>
+                                            <Button className='btn_pr' onClick={handleStartButton}>
+                                                Start new config
                                             </Button>
-                                            {configFile && (
-                                                <Button onClick={handleSubmission}>
-                                                    Upload config file and start
-                                                </Button>
-                                            )}
                                         </span>
-                                        {configFile && <p>Selected file: {configFile.name}</p>}
-                                    </span>
-                                </div>
-                            </>
-                        )}
-                        {!wizardSelected && (
-                            <>
-                                <p>You can connect and send files to a server too</p>
-                                <Button onClick={handleConnectServer}>Connect to a server</Button>
-                                {showConnectionForm && (
-                                    <>
-                                        <div className='input-group my-3 w-50'>
+                                        <span className='mx-4 d-flex flex-column-reverse'>
                                             <input
-                                                type='text'
-                                                className='form-control'
-                                                placeholder='Username'
-                                                aria-label='Username'
-                                                onChange={handleSetUser}
-                                            />
-                                            <span className='input-group-text'>@</span>
-                                            <input
-                                                type='text'
-                                                className='form-control'
-                                                placeholder='Server'
-                                                aria-label='Server'
-                                                onChange={handleSetAddress}
-                                            />
-                                        </div>
-                                        <div className='input-group my-3 w-25'>
-                                            <span className='input-group-text'>
-                                                <i className='bi bi-lock'></i>
-                                            </span>
-                                            <input
-                                                type='password'
-                                                className='form-control'
-                                                placeholder='Password'
-                                                aria-label='Password'
-                                                onChange={handleSetPassword}
-                                            />
-                                        </div>
-
-                                        <div>
-                                            <Button
-                                                variant={
-                                                    connectionStatus === ConnType.OPEN
-                                                        ? 'danger'
-                                                        : 'primary'
-                                                }
-                                                onClick={() => {
-                                                    connection();
+                                                ref={hiddenConfigFileInputRef}
+                                                className='hide_input_file'
+                                                type='file'
+                                                name='file'
+                                                onChange={(event) => {
+                                                    if (event.target.files) {
+                                                        setConfigFile(event.target?.files[0]);
+                                                    }
                                                 }}
-                                            >
-                                                {connectionStatus === ConnType.OPEN
-                                                    ? 'Disconnect'
-                                                    : 'Connect'}
-                                            </Button>
-                                        </div>
+                                            ></input>
 
-                                        <div className='my-3'>
-                                            <Button
-                                                variant='primary'
-                                                onClick={() => {
-                                                    setTimeout(() => {
-                                                        setResponse('');
-                                                    }, 5000);
-                                                    getMssg();
-                                                }}
-                                            >
-                                                Test
-                                            </Button>
-
-                                            {response && <pre>{response}</pre>}
-                                        </div>
-
-                                        <div className='my-3 files-selector d-flex flex-row'>
-                                            <span className='mx-3 d-flex flex-column-reverse'>
-                                                <input
-                                                    ref={hiddenConfigFileInputRef}
-                                                    className='hide_input_file'
-                                                    type='file'
-                                                    name='file'
-                                                    onChange={(event) => {
-                                                        if (event.target.files) {
-                                                            setConfigFile(event.target?.files[0]);
-                                                        }
-                                                    }}
-                                                ></input>
-
+                                            <span>
                                                 <Button
-                                                    className='file-button'
                                                     variant={configFile ? 'success' : 'secondary'}
-                                                    onClick={() =>
+                                                    onClick={() => {
+                                                        setWizardSelected(true);
                                                         handleSelectConfigFile(
                                                             hiddenConfigFileInputRef,
-                                                        )
-                                                    }
+                                                        );
+                                                    }}
                                                 >
                                                     {configFile
                                                         ? 'Select another config file'
                                                         : 'Select config file'}
                                                 </Button>
                                                 {configFile && (
-                                                    <p>Selected file: {configFile.name}</p>
+                                                    <Button onClick={handleSubmission}>
+                                                        Upload config file and start
+                                                    </Button>
                                                 )}
                                             </span>
-                                            <span className='mx-3 d-flex flex-column-reverse'>
+                                            {configFile && <p>Selected file: {configFile.name}</p>}
+                                        </span>
+                                    </div>
+                                </>
+                            )}
+                            {!wizardSelected && (
+                                <>
+                                    <p>You can connect and send files to a server too</p>
+                                    <Button onClick={handleConnectServer}>
+                                        Connect to a server
+                                    </Button>
+                                    {showConnectionForm && (
+                                        <>
+                                            <div className='input-group my-3 w-50'>
                                                 <input
-                                                    ref={hiddenMeshFileInputRef}
-                                                    className='hide_input_file'
-                                                    type='file'
-                                                    name='file'
-                                                    onChange={(event) => {
-                                                        if (event.target.files) {
-                                                            setMeshFile(event.target?.files[0]);
-                                                        }
-                                                    }}
-                                                ></input>
-
-                                                <Button
-                                                    className='file-button'
-                                                    variant={meshFile ? 'success' : 'secondary'}
-                                                    onClick={() =>
-                                                        handleSelectConfigFile(
-                                                            hiddenMeshFileInputRef,
-                                                        )
-                                                    }
-                                                >
-                                                    {meshFile
-                                                        ? 'Select another mesh file'
-                                                        : 'Select mesh file'}
-                                                </Button>
-                                                {meshFile && <p>Selected file: {meshFile.name}</p>}
-                                            </span>
-                                            <span>
-                                                <label>Messages delay</label>
-                                                <select
+                                                    type='text'
                                                     className='form-control'
-                                                    id='exampleFormControlSelect1'
-                                                    onChange={handleOptionChange}
+                                                    placeholder='Username'
+                                                    aria-label='Username'
+                                                    onChange={handleSetUser}
+                                                />
+                                                <span className='input-group-text'>@</span>
+                                                <input
+                                                    type='text'
+                                                    className='form-control'
+                                                    placeholder='Server'
+                                                    aria-label='Server'
+                                                    onChange={handleSetAddress}
+                                                />
+                                            </div>
+                                            <div className='input-group my-3 w-25'>
+                                                <span className='input-group-text'>
+                                                    <i className='bi bi-lock'></i>
+                                                </span>
+                                                <input
+                                                    type='password'
+                                                    className='form-control'
+                                                    placeholder='Password'
+                                                    aria-label='Password'
+                                                    onChange={handleSetPassword}
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <Button
+                                                    variant={
+                                                        connectionStatus === ConnType.OPEN
+                                                            ? 'danger'
+                                                            : 'primary'
+                                                    }
+                                                    onClick={() => {
+                                                        connection();
+                                                    }}
                                                 >
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                </select>
-                                            </span>
-                                        </div>
-                                        {connectionStatus === ConnType.CLOSE &&
-                                            configFile &&
-                                            meshFile && (
-                                                <div className='alert alert-info'>
-                                                    You must connect to a server first
-                                                </div>
-                                            )}
-                                        <Button
-                                            variant='primary'
-                                            disabled={connectionStatus === ConnType.CLOSE}
-                                            onClick={() => {
-                                                sendFiles();
-                                            }}
-                                        >
-                                            Send Files
-                                        </Button>
-                                        <Modal show={showModal} onHide={() => setShowModal(false)}>
-                                            <Modal.Header closeButton>
-                                                <Modal.Title>Server reponse</Modal.Title>
-                                            </Modal.Header>
-                                            <Modal.Body>{parseExecution()}</Modal.Body>
-                                        </Modal>
-                                    </>
-                                )}
-                            </>
-                        )}
-                    </>
-                )}
-                {!!section && (
-                    <>
-                        {section.title && <h1>{section.title}</h1>}
-                        {section.description && <p>{section.description}</p>}
-                        <Wizard
-                            questions={section.groups}
-                            answers={answers}
-                            setAnswer={handleSetAnswer}
-                            deleteAnswer={handleDeleteAnswer}
-                            setIsComplete={handleSetIsWizardComplete}
-                            setLoadingState={handleSetLoadingState}
-                            disabled={isWizardDisabled}
-                        ></Wizard>
+                                                    {connectionStatus === ConnType.OPEN
+                                                        ? 'Disconnect'
+                                                        : 'Connect'}
+                                                </Button>
+                                            </div>
 
-                        {isComplete && !section.nextSection && (
-                            <WizardComplete answers={answers}></WizardComplete>
-                        )}
-                        {isComplete && section.nextSection && (
-                            <Continue handleContinueButton={handleContinueButton}></Continue>
-                        )}
-                    </>
-                )}
-            </div>
-            {!!section && (
-                <div className='answers_container'>
-                    <Button variant='light' onClick={handleBackToWelcomePage}>
-                        Back to welcome page
-                    </Button>
+                                            <div className='my-3'>
+                                                <Button
+                                                    variant='primary'
+                                                    onClick={() => {
+                                                        setTimeout(() => {
+                                                            setResponse('');
+                                                        }, 5000);
+                                                        getMssg();
+                                                    }}
+                                                >
+                                                    Test
+                                                </Button>
 
-                    {answers.length > 0 && (
+                                                {response && <pre>{response}</pre>}
+                                            </div>
+
+                                            <div className='my-3 files-selector d-flex flex-row'>
+                                                <span className='mx-3 d-flex flex-column-reverse'>
+                                                    <input
+                                                        ref={hiddenConfigFileInputRef}
+                                                        className='hide_input_file'
+                                                        type='file'
+                                                        name='file'
+                                                        onChange={(event) => {
+                                                            if (event.target.files) {
+                                                                setConfigFile(
+                                                                    event.target?.files[0],
+                                                                );
+                                                            }
+                                                        }}
+                                                    ></input>
+
+                                                    <Button
+                                                        className='file-button'
+                                                        variant={
+                                                            configFile ? 'success' : 'secondary'
+                                                        }
+                                                        onClick={() =>
+                                                            handleSelectConfigFile(
+                                                                hiddenConfigFileInputRef,
+                                                            )
+                                                        }
+                                                    >
+                                                        {configFile
+                                                            ? 'Select another config file'
+                                                            : 'Select config file'}
+                                                    </Button>
+                                                    {configFile && (
+                                                        <p>Selected file: {configFile.name}</p>
+                                                    )}
+                                                </span>
+                                                <span className='mx-3 d-flex flex-column-reverse'>
+                                                    <input
+                                                        ref={hiddenMeshFileInputRef}
+                                                        className='hide_input_file'
+                                                        type='file'
+                                                        name='file'
+                                                        onChange={(event) => {
+                                                            if (event.target.files) {
+                                                                setMeshFile(event.target?.files[0]);
+                                                            }
+                                                        }}
+                                                    ></input>
+
+                                                    <Button
+                                                        className='file-button'
+                                                        variant={meshFile ? 'success' : 'secondary'}
+                                                        onClick={() =>
+                                                            handleSelectConfigFile(
+                                                                hiddenMeshFileInputRef,
+                                                            )
+                                                        }
+                                                    >
+                                                        {meshFile
+                                                            ? 'Select another mesh file'
+                                                            : 'Select mesh file'}
+                                                    </Button>
+                                                    {meshFile && (
+                                                        <p>Selected file: {meshFile.name}</p>
+                                                    )}
+                                                </span>
+                                                //// <span>
+                                <label>Messages delay</label>
+                                <select
+                                    className='form-control'
+                                    id='exampleFormControlSelect1'
+                                    onChange={handleOptionChange}
+                                >
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                </select>
+                            //// </span>
+                                            </div>
+                                            {connectionStatus === ConnType.CLOSE &&
+                                                configFile &&
+                                                meshFile && (
+                                                    <div className='alert alert-info'>
+                                                        You must connect to a server first
+                                                    </div>
+                                                )}
+                                            <Button
+                                                variant='primary'
+                                                disabled={connectionStatus === ConnType.CLOSE}
+                                                onClick={() => {
+                                                    sendFiles();
+                                                }}
+                                            >
+                                                Send Files
+                                            </Button>
+                                            <Modal
+                                                className='modal-xl'
+                                                role='dialog'
+                                                show={false}
+                                                onHide={() => setShowModal(false)}
+                                            >
+                                                <Modal.Header closeButton>
+                                                    <Modal.Title>Server reponse</Modal.Title>
+                                                </Modal.Header>
+                                                <Modal.Body>
+                                                    {table}
+                                                </Modal.Body>
+                                            </Modal>
+                                            {table}
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
+                    {!!section && (
                         <>
-                            <h2>Answers summary</h2>
+                            {section.title && <h1>{section.title}</h1>}
+                            {section.description && <p>{section.description}</p>}
+                            <Wizard
+                                questions={section.groups}
+                                answers={answers}
+                                setAnswer={handleSetAnswer}
+                                deleteAnswer={handleDeleteAnswer}
+                                setIsComplete={handleSetIsWizardComplete}
+                                setLoadingState={handleSetLoadingState}
+                                disabled={isWizardDisabled}
+                            ></Wizard>
 
-                            <div>
-                                {sectionSummary?.sections
-                                    .slice()
-                                    .reverse()
-                                    .map((section) => (
-                                        <div key={`section-${section.name}`}>
-                                            {getAnsweredQuestionForSection(section, answers)}
-                                        </div>
-                                    ))}
-                            </div>
+                            {isComplete && !section.nextSection && (
+                                <WizardComplete answers={answers}></WizardComplete>
+                            )}
+                            {isComplete && section.nextSection && (
+                                <Continue handleContinueButton={handleContinueButton}></Continue>
+                            )}
                         </>
                     )}
                 </div>
-            )}
-        </div>
+                {!!section && (
+                    <div className='answers_container'>
+                        <Button variant='light' onClick={handleBackToWelcomePage}>
+                            Back to welcome page
+                        </Button>
+
+                        {answers.length > 0 && (
+                            <>
+                                <h2>Answers summary</h2>
+
+                                <div>
+                                    {sectionSummary?.sections
+                                        .slice()
+                                        .reverse()
+                                        .map((section) => (
+                                            <div key={`section-${section.name}`}>
+                                                {getAnsweredQuestionForSection(section, answers)}
+                                            </div>
+                                        ))}
+                                </div>
+                            </>
+                        )}
+                    </div>
+                )}
+                <Link to='/server-connection'>Server Connection</Link> |{' '}
+                <Link to='/wizard'>Wizard</Link>
+                <Outlet></Outlet>
+            </div> */}
+        </>
     );
 }
 

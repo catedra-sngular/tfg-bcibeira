@@ -1,0 +1,27 @@
+.navbar {
+    height: 80px;
+
+    &-brand {
+        width: 50%;
+    }
+
+    &-collapse {
+        width: 20%;
+        flex-grow: 0;
+    }
+
+    &-nav {
+        display:flex;
+        flex: 1;
+        justify-content: space-around !important;
+    }
+}
+
+.container-header {
+    justify-content: space-around;
+    width: 100%;
+}
+
+.logo {
+    max-height: 30px;
+}

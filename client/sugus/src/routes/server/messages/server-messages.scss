@@ -1,0 +1,38 @@
+.description {
+    text-align: left;
+    margin-bottom: 15%;
+}
+
+.messages-container {
+    margin: 50px;
+    padding: 20px;
+    border-radius: 50px;
+    background-color: #505050;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin: 20px;
+    margin-left: 50px;
+    width: 40%;
+}
+
+.file-button {
+    width: auto;
+}
+
+.file-descriptor {
+    text-align: center;
+}
+
+.form-select {
+    width: 50%;
+}
+
+.select {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
