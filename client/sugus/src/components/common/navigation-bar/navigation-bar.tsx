@@ -1,6 +1,12 @@
+import { Button } from 'react-bootstrap';
+import { ConnectionProps } from '../../../interfaces/connection-props';
 import './navigation-bar.scss';
 
-export const NavigationBar = () => {
+export const NavigationBar = (props: ConnectionProps) => {
+    const isConnected = () => {
+        return !!props.connectionState.user && !!props.connectionState.address;
+    };
+
     return (
         <nav className='navbar navbar-expand-lg navbar-secondary bg-secondary'>
             <div className='container-header d-flex align-items-center'>
@@ -28,9 +34,12 @@ export const NavigationBar = () => {
                                     {'Connection'}
                                 </a>
                                 <div className='dropdown-divider'></div>
-                                <a className='dropdown-item' href='/server/messages'>
-                                    {'Send files'}
-                                </a>
+                                {isConnected() && (
+                                    <a className='dropdown-item' href='/server/messages'>
+                                        {'Send files'}
+                                    </a>
+                                )}
+                                {!isConnected() && <div className='joker-item'>{'Send files'}</div>}
                             </div>
                         </li>
                         <li className='nav-item dropdown'>
@@ -56,6 +65,16 @@ export const NavigationBar = () => {
                             </div>
                         </li>
                     </ul>
+                </div>
+
+                <div style={{ width: '250px' }}>
+                    {props.connectionState.dataLoaded && (
+                        <a className='status-connection' href='/server/connection'>
+                            <Button variant={isConnected() ? 'success' : 'primary'}>
+                                {isConnected() ? 'Connection is UP!' : 'Not connected'}
+                            </Button>
+                        </a>
+                    )}
                 </div>
             </div>
         </nav>

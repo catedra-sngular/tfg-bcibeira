@@ -3,6 +3,7 @@
 
     &-brand {
         width: 50%;
+        margin-left: 5%;
     }
 
     &-collapse {
@@ -13,15 +14,25 @@
     &-nav {
         display:flex;
         flex: 1;
-        justify-content: space-around !important;
+        justify-content: space-evenly !important;
     }
 }
 
 .container-header {
-    justify-content: space-around;
+    justify-content: space-between;
     width: 100%;
 }
 
 .logo {
     max-height: 30px;
+}
+
+.status-connection {
+    margin-right: 5%;
+}
+
+.joker-item {
+    font-style: italic;
+    color: #b4b4b4;
+    padding: 4px 16px 4px 16px;
 }

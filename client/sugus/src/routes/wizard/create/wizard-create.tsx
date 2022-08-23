@@ -141,7 +141,7 @@ function WizardCreate() {
     };
 
     return (
-        <div className='container'>
+        <div className='main-container'>
             <div className='wizard_container'>
                 {loadingQuestions && (
                     <div className='loading-questions-wrapper'>

@@ -36,7 +36,7 @@ export const Slider = () => {
                     <img className='d-block' src='/assets/wizard.png' alt='Create file' />
                 </a>
                 <Carousel.Caption>
-                    <h3>Create config file</h3>
+                    <h3>Create a config file</h3>
                     <p>Creates a new config file helped by a wizard</p>
                 </Carousel.Caption>
             </Carousel.Item>
