@@ -12,11 +12,15 @@ api = Api(mssges_v1_0_bp)
 conn_schema = ConnSchema()
 file_schema = FileSchema()
 
-localPath = os.environ.get('LOCAL_STORE_PATH')
-remotePath = os.environ.get('REMOTE_STORE_PATH')
+user = ''
+address = ''
+password = ''
 
-# localPath = '/home/RED/bcibeira/Escritorio/'
-# remotePath = 'endTest/server/pipe/resources/'
+# localPath = os.environ.get('LOCAL_STORE_PATH')
+# remotePath = os.environ.get('REMOTE_STORE_PATH')
+
+localPath = '/home/RED/bcibeira/Escritorio/'
+remotePath = 'endTest/server/pipe/resources/'
 
 # Inicia un cliente SSH
 ssh_client = paramiko.SSHClient()
@@ -25,19 +29,25 @@ def openConn(params):
     # Establecer política por defecto para localizar la llave del host localmente
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     # Conectarse
-    ssh_client.connect(params['dir'], 22, params['user'], params['passwd'])
+    ssh_client.connect(params['address'], 22, params['user'], params['password'])
 
-def closeConn():
+    global user, address, password
+    user = params['user']
+    address = params['address']
+    password = params['password']
+
+def closeConn(params):
+    global user, address, password
     if ssh_client:
-        # Cerrar la conexión
-        ssh_client.close()
+        if (params['password'] == password):
+            # Cerrar la conexión
+            ssh_client.close()
 
-def testServerAPI():
-    # Ejecutar un comando de forma remota capturando entrada, salida y error estándar
-    entrada, salida, error = ssh_client.exec_command('curl http://localhost:50000/api/v1.0/test/')
-    # Guardar la salida estándar
-    output = salida.read().decode('unicode-escape').replace('"','')
-    return output
+            user = ''
+            address = ''
+            password = ''
+        else:
+            raise ValueError
 
 def sendFile(file, folder):
     print('sftpeando...')
@@ -82,7 +92,7 @@ def storeFiles(folder):
 
     return (configFilename, meshFilename)
 
-class TestResource(Resource):
+class ConnectionResource(Resource):
     def post(self):
         data = request.get_json()
         conn_dict = conn_schema.load(data)
@@ -92,20 +102,22 @@ class TestResource(Resource):
             if type == ConnType.OPEN:
                 openConn(conn_dict)
             if type == ConnType.CLOSE:
-                closeConn()
+                closeConn(conn_dict)
             if type != ConnType.OPEN & type != ConnType.CLOSE:
                 return 'Parámetro de conexión no válido', 400
+        except ValueError:
+            return 'Credentials not correct', 401
         except:
-            closeConn()
             return 'Error de conexión', 500
-        return 200
+        return 'OK', 200
 
     def get(self):
-        try:
-            response = testServerAPI()
-        except:
-            closeConn()
-            return 'Error de conexión', 500
+
+        response = {
+            "user": user,
+            "address": address
+        }
+
         return response, 200
 
 class FileResource(Resource):
@@ -122,6 +134,6 @@ class FileResource(Resource):
         response = readMessages(hash)
         return response, 200
 
-api.add_resource(TestResource, '/api/v1.0/test/', endpoint='test_resource')
+api.add_resource(ConnectionResource, '/api/v1.0/connection/', endpoint='connection_resource')
 api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')
 # api.add_resource(MessagesResource, '/api/v1.0/file/', endpoint='file_resource')
