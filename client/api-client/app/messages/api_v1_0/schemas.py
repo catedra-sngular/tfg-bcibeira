@@ -9,3 +9,4 @@ class ConnSchema(ma.Schema):
 
 class FileSchema(ma.Schema):
     data = fields.String()
+    delay = fields.String()

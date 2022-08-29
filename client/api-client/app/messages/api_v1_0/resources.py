@@ -1,4 +1,3 @@
-from time import sleep
 from flask import request, Blueprint
 from flask_restful import Api, Resource
 
@@ -57,8 +56,8 @@ def sendFile(file, folder):
     sftp.put(localPath + folder + file, remotePath + folder + file, confirm=False)
     sftp.close()
 
-def notifyServer(config, mesh, folder):
-    data = '{"config":' + f'"{config}", "mesh": "{mesh}", "folder": "{folder}"' + '}'
+def notifyServer(config, mesh, folder, delay):
+    data = '{"config":' + f'"{config}", "mesh": "{mesh}", "folder": "{folder}", "delay": "{delay}"' + '}'
     command = f"curl -X POST -H 'Content-Type: application/json' -d '{data}' http://localhost:50000/api/v1.0/file/"
     # Ejecutar un comando de forma remota capturando entrada, salida y error estándar
     entrada, salida, error = ssh_client.exec_command(command)
@@ -122,6 +121,7 @@ class ConnectionResource(Resource):
 
 class FileResource(Resource):
     def post(self):
+        delay = request.form['delay']
         folder = obtainFolder()
         hash = folder[5:11]
 
@@ -129,11 +129,14 @@ class FileResource(Resource):
 
         sendFile(configFilename, folder)
         sendFile(meshFilename, folder)
-        notifyServer(configFilename, meshFilename, folder)
-        sleep(5)
+        notifyServer(configFilename, meshFilename, folder, delay)
+        return hash, 200
+
+class MessageResource(Resource):
+    def get(self, hash):
         response = readMessages(hash)
         return response, 200
 
 api.add_resource(ConnectionResource, '/api/v1.0/connection/', endpoint='connection_resource')
 api.add_resource(FileResource, '/api/v1.0/file/', endpoint='file_resource')
-# api.add_resource(MessagesResource, '/api/v1.0/file/', endpoint='file_resource')
+api.add_resource(MessageResource, '/api/v1.0/message/<int:hash>', endpoint='message_resource')
