@@ -1,11 +1,9 @@
-import errno
 from flask import request, Blueprint
 from flask_restful import Api, Resource
 
 from .schemas import QueueSchema, QueuesMessagesSchema, FileSchema
-import pika, os, shutil, base64
+import pika, os, json
 from random import randint
-import subprocess, json, functools
 from time import sleep
 
 queues_v1_0_bp = Blueprint('queues_v1_0_bp', __name__)
@@ -40,7 +38,7 @@ def readQueue(queue):
     sleep(2)
     method, properties, body = channel.basic_get(queue)
 
-    return body.decode('unicode-escape') if method else 'Any message yet'
+    return json.loads(body)['data'] if method else 'Any message yet'
 
 
 def obtainFolder():
@@ -142,13 +140,14 @@ class FileResource(Resource):
         file_dict = file_schema.load(data)
         configFilename = file_dict["config"]
         folder = file_dict["folder"]
+        time = file_dict["delay"]
         hash = folder[5:11]
 
         data = {
             "folder": folder,
             "file": configFilename,
             "type": 'run',
-            "time": 3,
+            "time": time,
             "queue": f'output-{hash}'
         }
         destination = 'input'

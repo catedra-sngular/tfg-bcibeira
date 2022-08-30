@@ -29,7 +29,7 @@ def connect():
     setUp()
 
 def send(queue, folder, time):
-    sleep(time)
+    sleep(2)
     path = f'/hostpipe/resources/{folder}history.csv'
     ch = connection.channel()
     ch.exchange_declare('output-', passive=True)
@@ -41,8 +41,8 @@ def send(queue, folder, time):
         ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
     else:
         file = open(path, 'r')
+
         while True:
-            sleep(time)
             data = file.read()
             if data == '':
                 break
@@ -50,34 +50,35 @@ def send(queue, folder, time):
                 "data": data,
             }
             ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
+            sleep(time)
+
+        response = {
+                "data": 'EOF',
+            }
+        ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
 
 def callback(ch, method, properties, data):
     body = json.loads(data)
 
     if body['type'] == 'run':
         binary = os.environ.get('BINARY')
-
         f = open("/hostpipe/workerpipe", "a")
         f.write(f"cd resources/{body['folder']} && {binary} {body['file']} && cd ../..")
         f.close()
 
-        send(body['queue'], body['folder'], body['time'])
+        send(body['queue'], body['folder'], int(body['time']))
 
 try:
   server_psswd = os.environ.get('SERVER_PSSWD')
   credentials = pika.PlainCredentials('server', server_psswd)
-  parameters = pika.ConnectionParameters('rabbit',
-                                          5672,
-                                          'su2',
-                                          credentials)
-  sleep(10)
+  parameters = pika.ConnectionParameters('rabbit', 5672, 'su2', credentials, heartbeat=0)
+
   connect()
   connection = pika.BlockingConnection(parameters)
 
   channel = connection.channel()
   channel.exchange_declare('input', passive=True)
   channel.queue_declare('input', passive=True)
-
   channel.basic_consume('input', on_message_callback=callback, auto_ack=True)
   print(' [*] Waiting for files. To exit press CTRL+C')
   channel.start_consuming()

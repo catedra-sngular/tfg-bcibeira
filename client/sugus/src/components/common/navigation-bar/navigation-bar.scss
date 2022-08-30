@@ -1,0 +1,38 @@
+.navbar {
+    height: 80px;
+
+    &-brand {
+        width: 50%;
+        margin-left: 5%;
+    }
+
+    &-collapse {
+        width: 20%;
+        flex-grow: 0;
+    }
+
+    &-nav {
+        display:flex;
+        flex: 1;
+        justify-content: space-evenly !important;
+    }
+}
+
+.container-header {
+    justify-content: space-between;
+    width: 100%;
+}
+
+.logo {
+    max-height: 30px;
+}
+
+.status-connection {
+    margin-right: 5%;
+}
+
+.joker-item {
+    font-style: italic;
+    color: #b4b4b4;
+    padding: 4px 16px 4px 16px;
+}

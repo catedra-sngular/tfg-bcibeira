@@ -1,0 +1,25 @@
+img.d-block {
+    min-height: 500px;
+    max-height: 500px;
+    margin: auto;
+}
+
+.carousel {
+    padding: 50px;
+    margin-left: 10%;
+    margin-right: 10%;
+
+    &-caption {
+        position: static;
+    }
+
+    &-inner {
+        background-color: #505050;
+        border-radius: 150px;
+    }
+
+    &-item {
+        margin-top: 20px;
+    }
+
+}
