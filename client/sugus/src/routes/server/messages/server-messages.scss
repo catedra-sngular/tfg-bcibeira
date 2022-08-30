@@ -19,6 +19,26 @@
     width: 40%;
 }
 
+.results-container {
+    margin: 50px;
+    padding: 20px;
+    border-radius: 50px;
+    background-color: #202020;
+    text-align: center;
+
+    h1 {
+        margin-bottom: 50px;
+    }
+
+    table {
+        width: 80%;
+        margin: auto;
+        background-color: aliceblue;
+        border-radius: 20px;
+    }
+
+}
+
 .file-button {
     width: auto;
 }

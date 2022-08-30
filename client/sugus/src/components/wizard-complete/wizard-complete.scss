@@ -1,5 +1,6 @@
 .wizard_completed {
     background-color: white;
+    color: black;
     width: calc(100% - 3em);
     max-width: 48em;
     padding: 1em 1em 1em 1.5em;
@@ -40,5 +41,14 @@
         text-align: center;
         background-color: darkolivegreen;
         content: '✔';
+    }
+}
+
+.redirect {
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+        color: white;
     }
 }

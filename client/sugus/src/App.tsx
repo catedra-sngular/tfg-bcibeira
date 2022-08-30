@@ -1,6 +1,6 @@
 import './App.scss';
 import Home from './routes/home/home';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import ServerConnection from './routes/server/connection/server-connection';
 import { NavigationBar } from './components/common/navigation-bar/navigation-bar';
 import { Footer } from './components/common/footer/footer';
@@ -9,24 +9,26 @@ import WizardCreate from './routes/wizard/create/wizard-create';
 import WizardContinue from './routes/wizard/continue/wizard-continue';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-// import 'bootstrap-icons/font/bootstrap-icons.css';
 
 function App() {
     const [user, setUser] = useState('');
     const [address, setAddress] = useState('');
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
+    const [configFile, setConfigFile] = useState<File>();
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
     const state = {
         user: user,
         setUser: setUser,
         address: address,
         setAddress: setAddress,
+        configFile: configFile,
+        setConfigFile: setConfigFile,
         dataLoaded: dataLoaded,
     };
 
     useEffect(() => {
-        !dataLoaded && getConnectionStatus();
-    }, [dataLoaded]);
+        getConnectionStatus();
+    }, []);
 
     const getConnectionStatus = () => {
         axios
@@ -55,19 +57,23 @@ function App() {
     return (
         <>
             <NavigationBar connectionState={state}></NavigationBar>
-            <BrowserRouter>
-                <Routes>
-                    <Route path='/' element={<Home />} />
-                    <Route path='wizard/create' element={<WizardCreate />} />
-                    <Route path='wizard/continue' element={<WizardContinue />} />
-                    <Route
-                        path='server/connection'
-                        element={<ServerConnection connectionState={state} />}
-                    />
-                    <Route path='server/messages' element={<ServerMessages />} />
-                    <Route></Route>
-                </Routes>
-            </BrowserRouter>
+            <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='wizard/create' element={<WizardCreate connectionState={state} />} />
+                <Route
+                    path='wizard/continue'
+                    element={<WizardContinue connectionState={state} />}
+                />
+                <Route
+                    path='server/connection'
+                    element={<ServerConnection connectionState={state} />}
+                />
+                <Route
+                    path='server/messages'
+                    element={<ServerMessages connectionState={state} />}
+                />
+                <Route></Route>
+            </Routes>
             <Footer></Footer> {/* FOOTER PROVISIONAL */}
         </>
     );

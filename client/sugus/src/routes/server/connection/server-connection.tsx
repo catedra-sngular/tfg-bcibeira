@@ -4,11 +4,7 @@ import Button from 'react-bootstrap/Button';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { ConnectionProps } from '../../../interfaces/connection-props';
-
-enum ConnType {
-    CLOSE = 0,
-    OPEN = 1,
-}
+import { ConnType } from '../../../interfaces/connection-type';
 
 function ServerConnection(props: ConnectionProps) {
     const [user, setUser] = useState('');
@@ -26,7 +22,7 @@ function ServerConnection(props: ConnectionProps) {
         } else {
             setConnectionStatus(ConnType.CLOSE);
         }
-    }, [props.connectionState]);
+    }, []);
 
     useEffect(() => {
         updateState();

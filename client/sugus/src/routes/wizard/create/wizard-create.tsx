@@ -14,8 +14,9 @@ import { Button } from 'react-bootstrap';
 import { Continue } from '../../../components/continue/continue';
 import { WizardComplete } from '../../../components/wizard-complete/wizard-complete';
 import { Wizard } from '../../../components/wizard/wizard';
+import { ConnectionProps } from '../../../interfaces/connection-props';
 
-function WizardCreate() {
+function WizardCreate(props: ConnectionProps) {
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [isComplete, setIsComplete] = useState<boolean>(false);
     const [isWizardDisabled, setIsWizardDisabled] = useState<boolean>(false);
@@ -184,7 +185,7 @@ function WizardCreate() {
                         ></Wizard>
 
                         {isComplete && !section.nextSection && (
-                            <WizardComplete answers={answers}></WizardComplete>
+                            <WizardComplete state={props} answers={answers}></WizardComplete>
                         )}
                         {isComplete && section.nextSection && (
                             <Continue handleContinueButton={handleContinueButton}></Continue>

@@ -13,8 +13,9 @@ import { Button } from 'react-bootstrap';
 import { Continue } from '../../../components/continue/continue';
 import { WizardComplete } from '../../../components/wizard-complete/wizard-complete';
 import { Wizard } from '../../../components/wizard/wizard';
+import { ConnectionProps } from '../../../interfaces/connection-props';
 
-function WizardContinue() {
+function WizardContinue(props: ConnectionProps) {
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [isComplete, setIsComplete] = useState<boolean>(false);
     const [isWizardDisabled, setIsWizardDisabled] = useState<boolean>(false);
@@ -22,9 +23,13 @@ function WizardContinue() {
     const [section, setSection] = useState<WizardSection>();
     const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
     const [sectionSummary, setSectionSummary] = useState<WizardSectionSummary>();
-    const [configFile, setConfigFile] = useState<File>();
+    const [configFile, setConfigFile] = useState<File>(props.connectionState.configFile as File);
 
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        props.connectionState.setConfigFile(configFile);
+    }, [configFile]);
 
     useEffect(() => {
         if (sectionName) {
@@ -168,7 +173,7 @@ function WizardContinue() {
 
     return (
         <>
-            <div className='container'>
+            <div className='main-container'>
                 <div className='wizard_container'>
                     {loadingQuestions && (
                         <div className='loading-questions-wrapper'>
@@ -238,7 +243,7 @@ function WizardContinue() {
                             ></Wizard>
 
                             {isComplete && !section.nextSection && (
-                                <WizardComplete answers={answers}></WizardComplete>
+                                <WizardComplete state={props} answers={answers}></WizardComplete>
                             )}
                             {isComplete && section.nextSection && (
                                 <Continue handleContinueButton={handleContinueButton}></Continue>

@@ -1,4 +1,5 @@
 import { Button } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 import { ConnectionProps } from '../../../interfaces/connection-props';
 import './navigation-bar.scss';
 
@@ -10,11 +11,11 @@ export const NavigationBar = (props: ConnectionProps) => {
     return (
         <nav className='navbar navbar-expand-lg navbar-secondary bg-secondary'>
             <div className='container-header d-flex align-items-center'>
-                <a className='navbar-brand' href='/'>
+                <NavLink className='navbar-brand' to='/'>
                     <span className='h1'>Su2uS</span>
                     <span>{' by '}</span>
                     <img className='logo' src='/assets/logoSU2.png' alt='logo' />
-                </a>
+                </NavLink>
                 <div className='collapse navbar-collapse' id='navbarSupportedContent'>
                     <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
                         <li className='nav-item dropdown'>
@@ -30,14 +31,14 @@ export const NavigationBar = (props: ConnectionProps) => {
                                 Server
                             </a>
                             <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
-                                <a className='dropdown-item' href='/server/connection'>
+                                <NavLink className='dropdown-item' to='/server/connection'>
                                     {'Connection'}
-                                </a>
+                                </NavLink>
                                 <div className='dropdown-divider'></div>
                                 {isConnected() && (
-                                    <a className='dropdown-item' href='/server/messages'>
+                                    <NavLink className='dropdown-item' to='/server/messages'>
                                         {'Send files'}
-                                    </a>
+                                    </NavLink>
                                 )}
                                 {!isConnected() && <div className='joker-item'>{'Send files'}</div>}
                             </div>
@@ -55,13 +56,13 @@ export const NavigationBar = (props: ConnectionProps) => {
                                 Wizard
                             </a>
                             <div className='dropdown-menu' aria-labelledby='navbarDropdown'>
-                                <a className='dropdown-item' href='/wizard/create'>
+                                <NavLink className='dropdown-item' to='/wizard/create'>
                                     {'New Wizard'}
-                                </a>
+                                </NavLink>
                                 <div className='dropdown-divider'></div>
-                                <a className='dropdown-item' href='/wizard/continue'>
+                                <NavLink className='dropdown-item' to='/wizard/continue'>
                                     {'Upload & continue'}
-                                </a>
+                                </NavLink>
                             </div>
                         </li>
                     </ul>
