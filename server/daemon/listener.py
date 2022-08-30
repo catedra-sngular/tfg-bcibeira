@@ -1,14 +1,12 @@
 #!/usr/bin/env python
-from random import randint
-from subprocess import run
-import pika, sys, os, time
+import pika, sys, os, json
+from time import sleep
 
 manager_psswd = os.environ.get('MANAGER_PSSWD')
 cred = pika.PlainCredentials('manager', manager_psswd)
-# VM
-# parameters = pika.ConnectionParameters('192.168.251.134', 5672, 'su2', credentials)
+
 # DOCKER
-param = pika.ConnectionParameters('rabbit', 5672, 'su2', cred) # heartbeat=0 para evitar timeout
+param = pika.ConnectionParameters('rabbit', 5672, 'su2', cred, heartbeat=0) # heartbeat=0 para evitar timeout
 
 conn = None
 chann = None
@@ -18,6 +16,7 @@ def setUp():
   chann.queue_declare(queue='input')
   chann.queue_bind(exchange='input', queue='input', routing_key='input')
   chann.exchange_declare(exchange='output-')
+  chann.close()
 
   print('Creado intercambio de entrada (input)')
   print('Creada cola de entrada (input)')
@@ -29,11 +28,40 @@ def connect():
     chann = conn.channel()
     setUp()
 
-def callback(ch, method, properties, body):
-    print(f" Jelouu ")
-    f = open("/hostpipe/workerpipe", "a")
-    f.write("touch this_file_was_created_on_main_host_from_a_container.txt")
-    f.close()
+def send(queue, folder, time):
+    sleep(time)
+    path = f'/hostpipe/resources/{folder}history.csv'
+    ch = connection.channel()
+    ch.exchange_declare('output-', passive=True)
+
+    if not os.path.exists(path):
+        response = {
+            "data": None,
+        }
+        ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
+    else:
+        file = open(path, 'r')
+        while True:
+            sleep(time)
+            data = file.read()
+            if data == '':
+                break
+            response = {
+                "data": data,
+            }
+            ch.basic_publish(exchange='output-', routing_key=queue, body=json.dumps(response))
+
+def callback(ch, method, properties, data):
+    body = json.loads(data)
+
+    if body['type'] == 'run':
+        binary = os.environ.get('BINARY')
+
+        f = open("/hostpipe/workerpipe", "a")
+        f.write(f"cd resources/{body['folder']} && {binary} {body['file']} && cd ../..")
+        f.close()
+
+        send(body['queue'], body['folder'], body['time'])
 
 try:
   server_psswd = os.environ.get('SERVER_PSSWD')
@@ -42,7 +70,7 @@ try:
                                           5672,
                                           'su2',
                                           credentials)
-  time.sleep(10)
+  sleep(10)
   connect()
   connection = pika.BlockingConnection(parameters)
 

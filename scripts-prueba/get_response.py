@@ -3,8 +3,8 @@ import pika, sys, os
 
 try:
   credentials = pika.PlainCredentials(sys.argv[1], sys.argv[1])
-  parameters = pika.ConnectionParameters('192.168.251.134',
-                                     5672,
+  parameters = pika.ConnectionParameters('localhost',
+                                     15672,
                                      'su2',
                                      credentials)
 

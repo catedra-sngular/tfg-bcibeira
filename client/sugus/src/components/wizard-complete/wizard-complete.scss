@@ -1,0 +1,44 @@
+.wizard_completed {
+    background-color: white;
+    width: calc(100% - 3em);
+    max-width: 48em;
+    padding: 1em 1em 1em 1.5em;
+    border: 1px solid darkolivegreen;
+    border-left-width: 6px;
+    border-left-style: solid;
+    border-radius: 3px;
+    position: relative;
+    line-height: 1.5;
+    margin: auto;
+
+    h1 {
+        font-size: 32px;
+    }
+    p {
+        font-size: 24px;
+    }
+
+    &__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    border-left-color: darkolivegreen;
+
+    &:before {
+        color: white;
+        width: 1.5em;
+        height: 1.5em;
+        position: absolute;
+        top: 1em;
+        left: -3px;
+        border-radius: 50%;
+        transform: translateX(-50%);
+        font-weight: bold;
+        line-height: 1.5;
+        text-align: center;
+        background-color: darkolivegreen;
+        content: '✔';
+    }
+}
