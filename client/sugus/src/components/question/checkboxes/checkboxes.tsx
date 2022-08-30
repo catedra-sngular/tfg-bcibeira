@@ -21,6 +21,8 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
 
         if (answer) {
             setSelectedOptions((answer?.value as string).split(', '));
+        } else if (question.default !== undefined) {
+            setSelectedOptions(question?.default.split(', '));
         }
 
         scrollIntoView();

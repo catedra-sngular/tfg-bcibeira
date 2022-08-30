@@ -45,6 +45,7 @@ export type QuestionCheckboxes = QuestionBase & {
     sortOptions: boolean;
     maxSelected?: number;
     minSelected?: number;
+    default?: string;
 };
 
 export type QuestionGroup = QuestionBase & {
