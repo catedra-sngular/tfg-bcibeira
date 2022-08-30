@@ -38,6 +38,7 @@ export type QuestionNumeric = QuestionBase & {
 export type QuestionText = QuestionBase & {
     maxLength?: number;
     minLength?: number;
+    default?: string;
 };
 
 export type QuestionCheckboxes = QuestionBase & {

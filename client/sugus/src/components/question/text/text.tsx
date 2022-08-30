@@ -25,6 +25,8 @@ export const WizardQuestionText = (props: QuestionProps<QuestionText>) => {
         if (answer) {
             setValue(answer.value as string);
             validateBoundaries(value);
+        } else if (question.default !== undefined) {
+            setValue(question.default);
         }
 
         scrollIntoView();
