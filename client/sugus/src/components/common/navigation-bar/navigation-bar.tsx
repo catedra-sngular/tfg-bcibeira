@@ -28,7 +28,7 @@ export const NavigationBar = (props: ConnectionProps) => {
                         },
                         {
                             label: 'Send Files',
-                            path: '/server/connection',
+                            path: '/server/messages',
                         },
                     ]}
                 />
@@ -38,11 +38,11 @@ export const NavigationBar = (props: ConnectionProps) => {
                     options={[
                         {
                             label: 'New Wizard',
-                            path: '/',
+                            path: '/wizard/create',
                         },
                         {
                             label: 'Upload & Continue',
-                            path: '/',
+                            path: '/wizard/continue',
                         },
                     ]}
                 />
