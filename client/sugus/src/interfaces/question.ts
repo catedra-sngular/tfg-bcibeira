@@ -17,6 +17,7 @@ export type QuestionBase = {
     visibleWhen?: any; // Object
     loading?: boolean;
     description?: string;
+    internal?: boolean;
 };
 
 export type QuestionButtonList = QuestionBase & {
