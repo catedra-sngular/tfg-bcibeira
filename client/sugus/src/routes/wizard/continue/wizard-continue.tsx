@@ -77,7 +77,7 @@ function WizardContinue(props: ConnectionProps) {
                     value: value,
                     section: sectionName,
                     questionTitle: question.title,
-                    internal: question.internal,
+                    internal: question.internal as boolean,
                 },
             ]);
         }
