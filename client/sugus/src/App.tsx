@@ -3,7 +3,6 @@ import Home from './routes/home/home';
 import { Route, Routes } from 'react-router-dom';
 import ServerConnection from './routes/server/connection/server-connection';
 import { NavigationBar } from './components/common/navigation-bar/navigation-bar';
-import { Footer } from './components/common/footer/footer';
 import ServerMessages from './routes/server/messages/server-messages';
 import WizardCreate from './routes/wizard/create/wizard-create';
 import WizardContinue from './routes/wizard/continue/wizard-continue';
@@ -74,7 +73,6 @@ function App() {
                 />
                 <Route></Route>
             </Routes>
-            <Footer></Footer> {/* FOOTER PROVISIONAL */}
         </>
     );
 }
