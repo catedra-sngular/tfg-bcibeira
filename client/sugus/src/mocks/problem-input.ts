@@ -6,57 +6,57 @@ export const PROBLEM_INPUT = {
     groups: [
         {
             key: 'MESH_DEFINITION',
-            title: 'MESH_DEFINITION',
+            title: 'Definition of the physical domain',
             type: QuestionType.group,
             children: [
                 {
                     key: 'MESH_FORMAT',
                     type: QuestionType.buttonList,
-                    title: 'Mesh format',
-                    options: [{ label: 'SU2', value: 'SU2' }],
+                    title: 'Format of the mesh file',
+                    options: [
+                        { label: 'SU2 Native format', value: 'SU2' },
+                        { label: 'CGNS format', value: 'CGNS' },
+                    ],
                 },
                 {
                     key: 'MESH_FILENAME',
                     type: QuestionType.text,
                     title: 'Mesh filename',
-                    minLength: 3,
+                    minLength: 4,
                     maxLength: 64,
                 },
             ],
         },
         {
             key: 'PROBLEM_INITIALIZATION',
-            title: 'PROBLEM_INITIALIZATION',
+            title: 'Initialization',
             type: QuestionType.group,
             children: [
                 {
                     key: 'RESTART_SOL',
                     type: QuestionType.buttonList,
-                    title: 'Reestart solution',
+                    title: 'Restart from a previously computed solution',
                     options: [
                         { label: 'YES', value: 'YES' },
                         { label: 'NO', value: 'NO' },
                     ],
                 },
-            ],
-        },
-        {
-            key: 'SOLUTION',
-            title: 'SOLUTION',
-            type: QuestionType.group,
-            visibleWhen: {
-                '==': [
-                    {
-                        var: 'RESTART_SOL',
-                    },
-                    'YES',
-                ],
-            },
-            children: [
                 {
                     key: 'SOLUTION_FILENAME',
                     type: QuestionType.text,
-                    title: 'SOLUTION_FILENAME',
+                    description:
+                        'Make sure the solution comes from a previous run of SU2 with the same connectivity!',
+                    visibleWhen: {
+                        '==': [
+                            {
+                                var: 'RESTART_SOL',
+                            },
+                            'YES',
+                        ],
+                    },
+                    title: 'Name of the solution file',
+                    minLength: 4,
+                    maxLength: 64,
                 },
             ],
         },

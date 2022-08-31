@@ -5,14 +5,14 @@ export const SOLVER_TYPE: QuestionFamily = {
     name: 'solver-type',
     title: 'Solver type',
     description:
-        'Family description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet eros elit, in placerat risus suscipit in. Proin vehicula laoreet justo. Cras dapibus lacus elit, at scelerisque urna maximus id. Nullam auctor, quam sit amet blandit finibus, sem dolor hendrerit est, non eleifend nisi mauris in neque. Mauris sit amet dui sit amet mauris sollicitudin tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam dapibus eu eros non volutpat. Integer vel feugiat tortor. Nullam vel metus blandit, ornare velit at, condimentum sem. Praesent consectetur ultricies orci in pulvinar.',
+        'Define the kind of problem at hand. Select the equations that govern your problem, include information of additional modelling conditions such as turbulence models, and determine whether the problem is steady or unsteady.',
     groups: [
         {
             key: 'solver-type-group-1',
-            title: 'solver-type-group-1',
+            title: 'Governing equations',
             type: QuestionType.group,
             description:
-                'Group description. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet eros elit, in placerat risus suscipit in. Proin vehicula laoreet justo. Cras dapibus lacus elit, at scelerisque urna maximus id. Nullam auctor, quam sit amet blandit finibus, sem dolor hendrerit est, non eleifend nisi mauris in neque. Mauris sit amet dui sit amet mauris sollicitudin tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam dapibus eu eros non volutpat. Integer vel feugiat tortor. Nullam vel metus blandit, ornare velit at, condimentum sem. Praesent consectetur ultricies orci in pulvinar.',
+                'Choose the governing equations for your problem. For each model, they are the equations that describe the state of the system as a function of the problem parameters.',
 
             children: [
                 {
@@ -20,22 +20,15 @@ export const SOLVER_TYPE: QuestionFamily = {
                     type: QuestionType.buttonList,
                     title: 'Physical governing equations',
                     description:
-                        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque laoreet eros elit, in placerat risus suscipit in. Proin vehicula laoreet justo. Cras dapibus lacus elit, at scelerisque urna maximus id. Nullam auctor, quam sit amet blandit finibus, sem dolor hendrerit est, non eleifend nisi mauris in neque. Mauris sit amet dui sit amet mauris sollicitudin tempus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam dapibus eu eros non volutpat. Integer vel feugiat tortor. Nullam vel metus blandit, ornare velit at, condimentum sem. Praesent consectetur ultricies orci in pulvinar.',
+                        'Euler and RANS correspond to Fluid Dynamics problems. Incompressible flow conditions can be imposed here. Also, a structural model can be selected.',
                     options: [
-                        { label: 'EULER', value: 'EULER' },
+                        { label: 'Euler', value: 'EULER' },
                         { label: 'RANS', value: 'RANS' },
-                        { label: 'INC_EULER', value: 'INC_EULER' },
-                        { label: 'INC_RANS', value: 'INC_RANS' },
-                        { label: 'ELASTICITY', value: 'ELASTICITY' },
+                        { label: 'Incompressible Euler', value: 'INC_EULER' },
+                        { label: 'Incompressible RANS', value: 'INC_RANS' },
+                        { label: 'Solid Elasticity', value: 'ELASTICITY' },
                     ],
                 },
-            ],
-        },
-        {
-            key: 'solver-type-group-2',
-            title: 'solver-type-group-2',
-            type: QuestionType.group,
-            children: [
                 {
                     key: 'KIND_TURB_MODEL',
                     type: QuestionType.buttonList,
@@ -47,25 +40,60 @@ export const SOLVER_TYPE: QuestionFamily = {
                         ],
                     },
                     options: [
-                        { label: 'NONE', value: 'NONE' },
-                        { label: 'SA', value: 'SA' },
+                        { label: 'Spalart-Allmaras (SA)', value: 'SA' },
+                        { label: 'Shear-Stress Transport (SST)', value: 'SST' },
                     ],
+                },
+                {
+                    key: 'SA_OPTIONS',
+                    type: QuestionType.checkboxes,
+                    title: 'Options and corrections for the SA turbulence model',
+                    visibleWhen: {
+                        or: [{ '==': [{ var: 'KIND_TURB_MODEL' }, 'SA'] }],
+                    },
+                    options: [
+                        { label: 'Default SA', value: 'NONE' },
+                        { label: 'Negative SA', value: 'NEG' },
+                        { label: 'Edwards version', value: 'EDW' },
+                        { label: 'Use FT2 term', value: 'FT2' },
+                        { label: 'Quadratic constitutive relation', value: 'QCR2000' },
+                        { label: 'Compressibility correction', value: 'COMP' },
+                        { label: 'Rotation correction', value: 'ROT' },
+                        { label: 'Bas-Cakmakcioclu transition', value: 'BC' },
+                        {
+                            label: 'Experimental combination according to TMR.',
+                            value: 'EXPERIMENTAL',
+                        },
+                    ],
+                    minSelected: 1,
+                    default: 'NONE',
                 },
                 {
                     key: 'GEOMETRIC_CONDITIONS',
                     type: QuestionType.buttonList,
                     title: 'Geometric conditions',
                     visibleWhen: { '==': [{ var: 'SOLVER' }, 'ELASTICITY'] },
-                    options: [{ label: 'LARGE_DEFORMATIONS', value: 'LARGE_DEFORMATIONS' }],
+                    options: [
+                        { label: 'Small deformations', value: 'SMALL_DEFORMATIONS' },
+                        { label: 'Large deformations', value: 'LARGE_DEFORMATIONS' },
+                    ],
                 },
+            ],
+        },
+        {
+            key: 'solver-type-group-2',
+            title: 'Time-domain problems',
+            type: QuestionType.group,
+            children: [
                 {
                     key: 'TIME_DOMAIN',
                     type: QuestionType.buttonList,
-                    title: 'Time domain',
+                    title: 'Type of problem',
                     options: [
-                        { label: 'YES', value: 'YES' },
-                        { label: 'NO', value: 'NO' },
+                        { label: 'Unsteady', value: 'YES' },
+                        { label: 'Steady-state', value: 'NO' },
                     ],
+                    default: 'NO',
                 },
             ],
         },
