@@ -70,11 +70,15 @@ export const NavigationBar = (props: ConnectionProps) => {
 
                 <div style={{ width: '250px' }}>
                     {props.connectionState.dataLoaded && (
-                        <a className='status-connection' href='/server/connection'>
-                            <Button variant={isConnected() ? 'success' : 'primary'}>
+                        <Button variant={isConnected() ? 'success' : 'primary'}>
+                            <NavLink
+                                className='redirect'
+                                style={{ color: isConnected() ? 'black' : 'white' }}
+                                to='/server/connection'
+                            >
                                 {isConnected() ? 'Connection is UP!' : 'Not connected'}
-                            </Button>
-                        </a>
+                            </NavLink>
+                        </Button>
                     )}
                 </div>
             </div>
