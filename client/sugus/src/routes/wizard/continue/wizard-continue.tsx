@@ -66,7 +66,7 @@ function WizardContinue(props: ConnectionProps) {
                     if (answer.key !== question.key) {
                         return { ...answer };
                     }
-                    return { ...answer, value: value, internal: question.internal };
+                    return { ...answer, value: value, internal: question.internal as boolean };
                 }),
             );
         } else {
