@@ -6,6 +6,8 @@ import { QuestionCheckboxes } from '../../../interfaces/question';
 import { QuestionOption } from '../../../interfaces/question-option';
 import { QuestionProps } from '../../../interfaces/question-props';
 import Button from 'react-bootstrap/Button';
+import * as jsonLogic from 'json-logic-js';
+
 export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes>) => {
     const { question, answers, setAnswer, setLoadingState, disabled, scrollIntoView } = props;
     const [options, setOptions] = useState<QuestionOption[]>([]);
@@ -42,7 +44,22 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                 subscription.unsubscribe();
             };
         } else {
-            setOptions(question.options);
+            const answersObject: { [key: string]: string | number } = {};
+            answers.forEach((answer: Answer) => {
+                answersObject[answer.key] = answer.value;
+            });
+            const filteredOptions: QuestionOption[] = question.options.filter(
+                (option: QuestionOption) => {
+                    const isOptionVisible: boolean = jsonLogic.apply(
+                        option.visibleWhen as jsonLogic.RulesLogic,
+                        answersObject,
+                    ) as boolean;
+
+                    return !option.visibleWhen || isOptionVisible;
+                },
+            );
+
+            setOptions(filteredOptions);
             scrollIntoView();
             setLoadingState(question, false);
         }

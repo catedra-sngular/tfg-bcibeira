@@ -5,4 +5,5 @@ export type Answer = {
     value: string | number;
     section?: string;
     questionTitle?: string;
+    internal?: boolean;
 };
