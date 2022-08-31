@@ -5,21 +5,26 @@
 
         &__img {
             margin: auto 12rem auto 24rem;
-        }
-        & .first-item {
-            height: 32rem;
-        }
-        & .second-item {
-            height: 55rem;
-        }
-        & .third-item {
-            height: 55rem;
-        }
-        & .fourth-item {
-            height: 55rem;
-        }
-        & .fifth-item {
-            height: 55rem;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &__first-item {
+                height: 28rem;
+            }
+            &__second-item {
+                height: 48rem;
+            }
+            &__third-item {
+                height: 42rem;
+            }
+            &__fourth-item {
+                height: 50rem;
+            }
+            &__fifth-item {
+                height: 42rem;
+            }
         }
 
         &__caption {

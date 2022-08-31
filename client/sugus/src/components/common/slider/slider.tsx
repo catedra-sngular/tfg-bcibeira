@@ -7,11 +7,13 @@ export const Slider = () => {
         <Carousel className='slider'>
             <Carousel.Item>
                 <div className='slider__item'>
-                    <img
-                        className='slider__item__img first-item'
-                        src='/assets/logoSU2.png'
-                        alt='Home'
-                    />
+                    <div className='slider__item__img'>
+                        <img
+                            className='slider__item__img__first-item'
+                            src='/assets/logoSU2.png'
+                            alt='Home'
+                        />
+                    </div>
 
                     <Carousel.Caption>
                         <div className='slider__item__caption'>
@@ -41,11 +43,13 @@ export const Slider = () => {
 
             <Carousel.Item>
                 <div className='slider__item'>
-                    <img
-                        className='slider__item__img second-item'
-                        src='/assets/wifi.png'
-                        alt='Home'
-                    />
+                    <div className='slider__item__img'>
+                        <img
+                            className='slider__item__img__second-item'
+                            src='/assets/wifi.png'
+                            alt='Home'
+                        />
+                    </div>
 
                     <Carousel.Caption>
                         <div className='slider__item__caption'>
@@ -63,48 +67,75 @@ export const Slider = () => {
             </Carousel.Item>
 
             <Carousel.Item>
-                <NavLink to='/server/messages'>
-                    <img
-                        className='d-block'
-                        style={{ height: '44rem' }}
-                        src='/assets/transfer.png'
-                        alt='Tranfer file'
-                    />
-                </NavLink>
-                <Carousel.Caption>
-                    <h3>Send file to server</h3>
-                    <p>Send file and launch SU2</p>
-                </Carousel.Caption>
+                <div className='slider__item'>
+                    <div className='slider__item__img'>
+                        <img
+                            className='slider__item__img__third-item'
+                            src='/assets/transfer.png'
+                            alt='Tranfer file'
+                        />
+                    </div>
+
+                    <Carousel.Caption>
+                        <div className='slider__item__caption'>
+                            <h1 className='slider__item__caption__title'>Transfer File</h1>
+                            <p className='slider__item__caption__description'>
+                                Send file to a server and launch SU2
+                            </p>
+                            <Link to='/server/connection' className='slider__item__caption__button'>
+                                <span>Send File</span>
+                            </Link>
+                        </div>
+                    </Carousel.Caption>
+                </div>
             </Carousel.Item>
 
             <Carousel.Item>
-                <NavLink to='/wizard/create'>
-                    <img
-                        className='d-block'
-                        style={{ height: '44rem' }}
-                        src='/assets/wizard.png'
-                        alt='Create file'
-                    />
-                </NavLink>
-                <Carousel.Caption>
-                    <h3>Create a config file</h3>
-                    <p>Creates a new config file helped by a wizard</p>
-                </Carousel.Caption>
+                <div className='slider__item'>
+                    <div className='slider__item__img'>
+                        <img
+                            className='slider__item__img__fourth-item'
+                            src='/assets/wizard.png'
+                            alt='Create file'
+                        />
+                    </div>
+
+                    <Carousel.Caption>
+                        <div className='slider__item__caption'>
+                            <h1 className='slider__item__caption__title'>Create a config file</h1>
+                            <p className='slider__item__caption__description'>
+                                Creates a new config file helped by a wizard
+                            </p>
+                            <Link to='/wizard/create' className='slider__item__caption__button'>
+                                <span>Create Config File</span>
+                            </Link>
+                        </div>
+                    </Carousel.Caption>
+                </div>
             </Carousel.Item>
 
             <Carousel.Item>
-                <NavLink to='/wizard/continue'>
-                    <img
-                        className='d-block'
-                        style={{ height: '44rem' }}
-                        src='/assets/save.png'
-                        alt='Create file'
-                    />
-                </NavLink>
-                <Carousel.Caption>
-                    <h3>Upload file</h3>
-                    <p>{'Upload & edit a file'}</p>
-                </Carousel.Caption>
+                <div className='slider__item'>
+                    <div className='slider__item__img'>
+                        <img
+                            className='slider__item__img__fifth-item'
+                            src='/assets/save.png'
+                            alt='Create file'
+                        />
+                    </div>
+
+                    <Carousel.Caption>
+                        <div className='slider__item__caption'>
+                            <h1 className='slider__item__caption__title'>Upload File</h1>
+                            <p className='slider__item__caption__description'>
+                                {'Upload & edit a file'}
+                            </p>
+                            <Link to='/wizard/continue' className='slider__item__caption__button'>
+                                <span>Upload File</span>
+                            </Link>
+                        </div>
+                    </Carousel.Caption>
+                </div>
             </Carousel.Item>
         </Carousel>
     );
