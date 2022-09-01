@@ -82,7 +82,7 @@ export const Slider = () => {
                             <p className='slider__item__caption__description'>
                                 Send file to a server and launch SU2
                             </p>
-                            <Link to='/server/connection' className='slider__item__caption__button'>
+                            <Link to='/server/messages' className='slider__item__caption__button'>
                                 <span>Send File</span>
                             </Link>
                         </div>
