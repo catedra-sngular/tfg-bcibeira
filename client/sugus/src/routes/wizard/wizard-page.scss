@@ -6,7 +6,7 @@
 .main-container {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height: calc(100% - 10rem);
     height: auto;
     margin-bottom: 32px;
     width: auto;
