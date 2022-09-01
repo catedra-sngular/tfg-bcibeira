@@ -137,9 +137,6 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                             <input
                                 type='checkbox'
                                 checked={selectedOptions.includes(option.value)}
-                                onChange={() => {
-                                    console.log('loren ipsum');
-                                }}
                             ></input>
                             {option.label}
                         </Button>
