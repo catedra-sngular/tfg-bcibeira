@@ -1,4 +1,72 @@
 .greeting {
     text-align: center;
-    margin-top: 20px;
+    border-bottom: 4px solid #b31644;
+    background-color: transparent;
+    margin-top: 0 !important;
+    padding: 2.4rem;
+
+    &__title {
+        font-size: 4.4rem;
+        font-weight: 600;
+        color: #ffffff;
+        padding-bottom: 2.2rem;
+    }
+    &__subtitle {
+        font-size: 1.8rem;
+        font-weight: 400;
+        color: #ffffff;
+    }
+}
+
+.home {
+    &__su2 {
+        width: 65%;
+        padding: 20rem 0;
+        margin: auto;
+
+        &__title {
+            font-size: 7rem;
+            font-weight: 600;
+            border-bottom: 3px solid #b31644;
+            padding-bottom: 1rem;
+            margin-bottom: 8.2rem;
+            color: white;
+            text-align: center;
+        }
+
+        &__img {
+            width: 45%;
+            height: 24rem;
+        }
+
+        &__content {
+            display: flex;
+
+            &__description {
+                font-size: 2rem;
+                color: white;
+                padding: 0 2rem 0 12rem;
+                margin-bottom: 6rem;
+            }
+
+            &__button {
+                outline: none;
+                border: none;
+                border-radius: 8px;
+                background-color: #9f0030;
+                font-size: 1.8rem;
+                padding: 1.4rem 6rem;
+                width: fit-content;
+                color: #ffffff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 2rem auto 0 auto;
+
+                &:hover {
+                    background-color: #b31644;
+                }
+            }
+        }
+    }
 }

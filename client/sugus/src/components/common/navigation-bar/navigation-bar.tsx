@@ -1,6 +1,8 @@
-import { Button } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import { ConnectionProps } from '../../../interfaces/connection-props';
+import { Link } from 'react-router-dom';
+import { Dropdown } from '../dropdown/dropdown';
+import { AiTwotoneCheckCircle } from 'react-icons/ai';
 import './navigation-bar.scss';
 
 export const NavigationBar = (props: ConnectionProps) => {
@@ -9,11 +11,70 @@ export const NavigationBar = (props: ConnectionProps) => {
     };
 
     return (
-        <nav className='navbar navbar-expand-lg navbar-secondary bg-secondary'>
-            <div className='container-header d-flex align-items-center'>
+        <nav className='navbar'>
+            <Link to='/' className='navbar__logo'>
+                <span className='navbar__logo__first-item'>Su2uS</span>
+                <span className='navbar__logo__second-item'>by</span>
+                <img className='navbar__logo__img-item' src='/assets/logoSU2.png' alt='logo' />
+            </Link>
+
+            <div className='navbar__navigation'>
+                <Dropdown
+                    label='Server'
+                    options={[
+                        {
+                            label: 'Connection',
+                            path: '/server/connection',
+                        },
+                        {
+                            label: 'Send Files',
+                            path: '/server/messages',
+                        },
+                    ]}
+                />
+
+                <Dropdown
+                    label='Wizard'
+                    options={[
+                        {
+                            label: 'New Wizard',
+                            path: '/wizard/create',
+                        },
+                        {
+                            label: 'Upload & Continue',
+                            path: '/wizard/continue',
+                        },
+                    ]}
+                />
+            </div>
+
+            <div>
+                {/* {props.connectionState.dataLoaded && ( */}
+                <Link className='navbar__connection-status' to='/server/connection'>
+                    <AiTwotoneCheckCircle
+                        className={
+                            isConnected()
+                                ? 'navbar__connection-status__icon connected'
+                                : 'navbar__connection-status__icon disconnected'
+                        }
+                    />
+                    <span
+                        className={
+                            isConnected()
+                                ? 'navbar__connection-status__label connected'
+                                : 'navbar__connection-status__label disconnected'
+                        }
+                    >
+                        {isConnected() ? 'Connected' : 'Disconnected'}
+                    </span>
+                </Link>
+                {/* )} */}
+            </div>
+
+            {/* <div className='container-header d-flex align-items-center'>
                 <NavLink className='navbar-brand' to='/'>
                     <span className='h1'>Su2uS</span>
-                    <span>{' by '}</span>
+                    <span className='by'>{' by '}</span>
                     <img className='logo' src='/assets/logoSU2.png' alt='logo' />
                 </NavLink>
                 <div className='collapse navbar-collapse' id='navbarSupportedContent'>
@@ -81,7 +142,7 @@ export const NavigationBar = (props: ConnectionProps) => {
                         </Button>
                     )}
                 </div>
-            </div>
+            </div> */}
         </nav>
     );
 };

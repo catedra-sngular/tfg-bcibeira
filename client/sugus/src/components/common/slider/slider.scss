@@ -1,25 +1,98 @@
-img.d-block {
-    min-height: 500px;
-    max-height: 500px;
-    margin: auto;
+.slider {
+    &__item {
+        display: flex;
+        align-items: center;
+
+        &__img {
+            margin: auto 12rem auto 24rem;
+            width: 30%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &__first-item {
+                height: 28rem;
+            }
+            &__second-item {
+                height: 48rem;
+            }
+            &__third-item {
+                height: 42rem;
+            }
+            &__fourth-item {
+                height: 50rem;
+            }
+            &__fifth-item {
+                height: 42rem;
+            }
+        }
+
+        &__caption {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            width: 64rem;
+
+            &__title {
+                font-size: 7rem;
+                font-weight: 600;
+                border-bottom: 3px solid #b31644;
+                padding-bottom: 1rem;
+                margin-bottom: 3.2rem;
+            }
+
+            &__description {
+                font-size: 2rem;
+            }
+
+            &__button {
+                outline: none;
+                border: none;
+                border-radius: 8px;
+                background-color: #9f0030;
+                font-size: 1.8rem;
+                padding: 1.4rem 6rem;
+                width: fit-content;
+                color: #ffffff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 2rem auto 0 auto;
+
+                &:hover {
+                    background-color: #b31644;
+                }
+            }
+        }
+    }
 }
 
 .carousel {
-    padding: 50px;
-    margin-left: 10%;
-    margin-right: 10%;
+    width: 100%;
+    height: calc(100% - 10rem - 3.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &-caption {
         position: static;
     }
 
     &-inner {
-        background-color: #505050;
-        border-radius: 150px;
+        width: 100%;
+
+        display: flex;
+        align-items: center;
     }
 
-    &-item {
-        margin-top: 20px;
+    &-control-prev-icon {
+        font-size: 50rem;
     }
 
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 100px;
+        height: 100px;
+        font-weight: 800;
+    }
 }

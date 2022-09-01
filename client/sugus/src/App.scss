@@ -1,29 +1,58 @@
 $theme-colors: (
-    "primary": #a12f30,
-    "secondary": #cecece,
-    "success": rgb(19, 151, 48),
-    "dark": #000000,
-    "danger": #e00b00,
-    "light": rgb(26, 87, 167),
-    "info": rgb(44, 200, 221),
+    'primary': #a12f30,
+    'secondary': #cecece,
+    'success': rgb(19, 151, 48),
+    'dark': #000000,
+    'danger': #e00b00,
+    'light': rgb(26, 87, 167),
+    'info': rgb(44, 200, 221),
 );
+
+$color-bg-primary: #575757;
+$color-bg-secondary: #3a3939;
+$color-primary: #9f0030;
+$color-primary-hover: #b31644;
+$color-secondary: #1e73be;
+$color-white: #ffffff;
+$color-black: #000000;
+$color-grey: #6b7c93;
+
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
-html, div#root {
+html,
+div#root {
     height: 100%;
+}
+
+html {
+    font-size: 62.5%;
 }
 
 body {
     height: 100%;
     margin: 0;
-    font-family: "Exo 2", sans-serif;
+    padding: 0;
+    font-family: 'Exo 2', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #333333;
-    color: #FFFFFF;
+    // background-color: #5a5a5a;
+    background-color: #918f8f;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-      monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+ul,
+li {
+    list-style: none;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+
+    &:hover {
+        color: inherit;
+    }
 }

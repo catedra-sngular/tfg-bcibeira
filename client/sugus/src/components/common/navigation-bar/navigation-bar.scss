@@ -1,32 +1,119 @@
 .navbar {
-    height: 80px;
-
-    &-brand {
-        width: 50%;
-        margin-left: 5%;
-    }
-
-    &-collapse {
-        width: 20%;
-        flex-grow: 0;
-    }
-
-    &-nav {
-        display:flex;
-        flex: 1;
-        justify-content: space-evenly !important;
-    }
-}
-
-.container-header {
+    height: 10rem;
+    background-color: #ffffff;
+    display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    padding: 0 7rem;
+    border-bottom: 6px solid #b31644;
+
+    &__logo {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: #000000;
+        width: 20%;
+
+        &__first-item {
+            font-size: 4.8rem;
+            font-weight: 600;
+        }
+        &__second-item {
+            font-size: 1.8rem;
+            font-style: italic;
+            margin-top: 2.4rem;
+        }
+        &__img-item {
+            height: 5.7rem;
+            margin-top: 1.8rem;
+            margin-left: -0.4rem;
+        }
+    }
+
+    &__navigation {
+        display: flex;
+        justify-content: flex-end;
+        gap: 4rem;
+        width: 60%;
+    }
+
+    &__connection-status {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 1.2rem;
+        margin-top: 0.4rem;
+        transition: 0.2s ease-in;
+        width: 20rem;
+
+        &:hover {
+            transform: scale(1.03);
+        }
+
+        &__icon {
+            font-size: 1.2rem;
+        }
+        &__label {
+            font-size: 1.4rem;
+            font-weight: 300;
+        }
+
+        & .connected {
+            color: #158c15;
+        }
+        & .disconnected {
+            color: #9f0030;
+        }
+    }
 }
 
-.logo {
-    max-height: 30px;
-}
+// .navbar {
+//     height: 80px;
 
+//     &-brand {
+//         width: 50%;
+//         margin-left: 5%;
+
+//         & .h1 {
+//             font-size: 48px;
+//             font-weight: 600;
+//         }
+
+//         & .by {
+//             font-style: italic;
+//         }
+//     }
+
+//     &-collapse {
+//         width: 20%;
+//         flex-grow: 0;
+//     }
+
+//     &-nav {
+//         display: flex;
+//         flex: 1;
+//         justify-content: space-evenly !important;
+//     }
+// }
+
+// .container-header {
+//     justify-content: space-between;
+//     width: 100%;
+// }
+
+// .logo {
+//     max-height: 30px;
+// }
+
+// .status-connection {
+//     margin-right: 5%;
+// }
+
+// .joker-item {
+//     font-style: italic;
+//     color: #b4b4b4;
+//     padding: 4px 16px 4px 16px;
+// }
 .joker-item {
     font-style: italic;
     color: #b4b4b4;

@@ -317,8 +317,12 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                     </Modal>
                     {!!section && (
                         <>
-                            {section.title && <h1>{section.title}</h1>}
-                            {section.description && <p>{section.description}</p>}
+                            {section.title && (
+                                <h1 className='wizard-create__title'>{section.title}</h1>
+                            )}
+                            {section.description && (
+                                <p className='wizard-create__description'>{section.description}</p>
+                            )}
                             <Wizard
                                 questions={section.groups}
                                 answers={answers}

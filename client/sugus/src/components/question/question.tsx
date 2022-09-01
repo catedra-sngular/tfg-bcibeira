@@ -152,14 +152,16 @@ export const WizardQuestion = (props: QuestionProps) => {
                                 </div>
                             }
                         >
-                            <span className='icon__help' onClick={handleToggleShowDescription}>
+                            <span className='icon-help' onClick={handleToggleShowDescription}>
                                 ?
                             </span>
                         </Popover>
                     )}
                 </div>
                 {question.description && question.type === QuestionType.group && (
-                    <p>{question.description}</p>
+                    <p style={{ fontSize: '1.6rem', marginBottom: '4rem' }}>
+                        {question.description}
+                    </p>
                 )}
 
                 {renderQuestionType(question)}

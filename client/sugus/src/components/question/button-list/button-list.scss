@@ -4,3 +4,11 @@
     gap: 16px;
     flex-wrap: wrap;
 }
+
+.button-list {
+    &__item {
+        min-width: 12rem;
+        font-size: 1.6rem;
+        margin-top: 2rem;
+    }
+}
