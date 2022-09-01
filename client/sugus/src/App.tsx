@@ -4,10 +4,10 @@ import { Route, Routes } from 'react-router-dom';
 import ServerConnection from './routes/server/connection/server-connection';
 import { NavigationBar } from './components/common/navigation-bar/navigation-bar';
 import ServerMessages from './routes/server/messages/server-messages';
-import WizardCreate from './routes/wizard/create/wizard-create';
-import WizardContinue from './routes/wizard/continue/wizard-continue';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import WizardPage from './routes/wizard/wizard-page';
+import { ConnectionProps } from './interfaces/connection-props';
 
 function App() {
     const [user, setUser] = useState('');
@@ -15,14 +15,16 @@ function App() {
     const [dataLoaded, setDataLoaded] = useState<boolean>(false);
     const [configFile, setConfigFile] = useState<File>();
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
-    const state = {
-        user: user,
-        setUser: setUser,
-        address: address,
-        setAddress: setAddress,
-        configFile: configFile,
-        setConfigFile: setConfigFile,
-        dataLoaded: dataLoaded,
+    const state: ConnectionProps = {
+        connectionState: {
+            user: user,
+            setUser: setUser,
+            address: address,
+            setAddress: setAddress,
+            configFile: configFile,
+            setConfigFile: setConfigFile,
+            dataLoaded: dataLoaded,
+        },
     };
 
     useEffect(() => {
@@ -55,21 +57,24 @@ function App() {
 
     return (
         <>
-            <NavigationBar connectionState={state}></NavigationBar>
+            <NavigationBar connectionState={state.connectionState}></NavigationBar>
             <Routes>
                 <Route path='/' element={<Home />} />
-                <Route path='wizard/create' element={<WizardCreate connectionState={state} />} />
+                <Route
+                    path='wizard/create'
+                    element={<WizardPage props={state} isNewWizard={true} />}
+                />
                 <Route
                     path='wizard/continue'
-                    element={<WizardContinue connectionState={state} />}
+                    element={<WizardPage props={state} isNewWizard={false} />}
                 />
                 <Route
                     path='server/connection'
-                    element={<ServerConnection connectionState={state} />}
+                    element={<ServerConnection connectionState={state.connectionState} />}
                 />
                 <Route
                     path='server/messages'
-                    element={<ServerMessages connectionState={state} />}
+                    element={<ServerMessages connectionState={state.connectionState} />}
                 />
                 <Route></Route>
             </Routes>
