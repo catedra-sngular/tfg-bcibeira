@@ -114,3 +114,17 @@
 //     color: #b4b4b4;
 //     padding: 4px 16px 4px 16px;
 // }
+.joker-item {
+    font-style: italic;
+    color: #b4b4b4;
+    padding: 4px 16px 4px 16px;
+}
+
+.redirect {
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+        color: white;
+    }
+}

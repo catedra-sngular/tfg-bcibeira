@@ -29,8 +29,8 @@ const getChildContent = (questions: Question[], answers: Answer[]): string[] => 
                 (question as QuestionGroup).children,
                 answers,
             );
-            if (childContent.length > 0 && question.title) {
-                addGroupHeader(content, question.title);
+            if (childContent.length > 0) {
+                addGroupHeader(content, question.title || question.key);
                 content.push(...childContent);
             }
         } else {
@@ -56,5 +56,9 @@ const addGroupHeader = (content: string[], familyName: string): void => {
 };
 
 const addVariableContent = (content: string[], question: Question, answer: Answer): void => {
-    content.push(`% ${question?.title || ''}\n${question.key} = ${answer.value}\n`);
+    content.push(
+        `% ${question?.title || ''}\n${answer.internal ? '% SU2US INTERNAL QUESTION: ' : ''}${
+            question.key
+        } = ${answer.value}\n`,
+    );
 };

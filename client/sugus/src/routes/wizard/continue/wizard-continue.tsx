@@ -66,7 +66,7 @@ function WizardContinue(props: ConnectionProps) {
                     if (answer.key !== question.key) {
                         return { ...answer };
                     }
-                    return { ...answer, value: value };
+                    return { ...answer, value: value, internal: question.internal as boolean };
                 }),
             );
         } else {
@@ -77,6 +77,7 @@ function WizardContinue(props: ConnectionProps) {
                     value: value,
                     section: sectionName,
                     questionTitle: question.title,
+                    internal: question.internal as boolean,
                 },
             ]);
         }
@@ -117,15 +118,17 @@ function WizardContinue(props: ConnectionProps) {
             const validLines: string[] = (fileReader.result as string)
                 .split('\n')
                 .filter((line: string) => {
-                    return !line.match(/^%.*$/);
+                    return !line.match(/^%.*$/) || line.match(/^% SU2US.*$/);
                 });
             const importedAnswers: Answer[] = [];
             validLines.forEach((line: string) => {
-                const matches = line.match(/(.*)=(.*)/);
+                const internal = line.includes('SU2US INTERNAL QUESTION');
+                const matches = line.replace(/% SU2US INTERNAL QUESTION: /, '').match(/(.*)=(.*)/);
                 if (matches) {
                     importedAnswers.push({
                         key: matches[1].trim(),
                         value: matches[2].trim(),
+                        internal,
                     });
                 }
             });
@@ -141,7 +144,7 @@ function WizardContinue(props: ConnectionProps) {
     ) => {
         const answeredQuestionsForSection = answers
             .filter((answer) => {
-                return section.questionNames.includes(answer.key);
+                return section.questionNames.includes(answer.key) && !answer.internal;
             })
             .map((answer) => (
                 <p key={answer.key}>

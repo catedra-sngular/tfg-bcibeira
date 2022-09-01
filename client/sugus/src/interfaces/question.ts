@@ -17,6 +17,7 @@ export type QuestionBase = {
     visibleWhen?: any; // Object
     loading?: boolean;
     description?: string;
+    internal?: boolean;
 };
 
 export type QuestionButtonList = QuestionBase & {
@@ -38,6 +39,7 @@ export type QuestionNumeric = QuestionBase & {
 export type QuestionText = QuestionBase & {
     maxLength?: number;
     minLength?: number;
+    default?: string;
 };
 
 export type QuestionCheckboxes = QuestionBase & {
@@ -45,6 +47,7 @@ export type QuestionCheckboxes = QuestionBase & {
     sortOptions: boolean;
     maxSelected?: number;
     minSelected?: number;
+    default?: string;
 };
 
 export type QuestionGroup = QuestionBase & {

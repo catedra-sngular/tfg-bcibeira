@@ -60,7 +60,7 @@ function WizardCreate(props: ConnectionProps) {
                     if (answer.key !== question.key) {
                         return { ...answer };
                     }
-                    return { ...answer, value: value };
+                    return { ...answer, value: value, internal: question.internal as boolean };
                 }),
             );
         } else {
@@ -71,6 +71,7 @@ function WizardCreate(props: ConnectionProps) {
                     value: value,
                     section: sectionName,
                     questionTitle: question.title,
+                    internal: question.internal as boolean,
                 },
             ]);
         }
@@ -111,7 +112,7 @@ function WizardCreate(props: ConnectionProps) {
     ) => {
         const answeredQuestionsForSection = answers
             .filter((answer) => {
-                return section.questionNames.includes(answer.key);
+                return section.questionNames.includes(answer.key) && !answer.internal;
             })
             .map((answer) => (
                 <p key={answer.key}>
