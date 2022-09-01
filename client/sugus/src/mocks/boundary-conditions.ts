@@ -11,12 +11,14 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
             children: [
                 {
                     key: 'boundary-conditions-selection',
-                    title: 'boundary-conditions-selection',
+                    title: 'Choose the boundary conditions',
+                    description:
+                        'The boundary conditions and options available are those that can be applied for the solver you have selected',
                     internal: true,
                     type: QuestionType.checkboxes,
                     options: [
                         {
-                            label: 'MARKER_HEATFLUX',
+                            label: 'No-slip wall',
                             value: 'MARKER_HEATFLUX',
                             visibleWhen: {
                                 or: [
@@ -27,7 +29,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                         },
 
                         {
-                            label: 'INC_INLET_TYPE',
+                            label: 'Inlet type',
                             value: 'INC_INLET_TYPE',
                             visibleWhen: {
                                 or: [
@@ -37,7 +39,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'INC_INLET_DAMPING',
+                            label: 'Inlet damping',
                             value: 'INC_INLET_DAMPING',
                             visibleWhen: {
                                 or: [
@@ -47,7 +49,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'INC_OUTLET_TYPE',
+                            label: 'Outlet type',
                             value: 'INC_OUTLET_TYPE',
                             visibleWhen: {
                                 or: [
@@ -57,7 +59,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'INC_OUTLET_DAMPING',
+                            label: 'Outlet damping',
                             value: 'INC_OUTLET_DAMPING',
                             visibleWhen: {
                                 or: [
@@ -68,7 +70,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                         },
 
                         {
-                            label: 'MARKER_FAR',
+                            label: 'Farfield',
                             value: 'MARKER_FAR',
                             visibleWhen: {
                                 or: [
@@ -79,19 +81,17 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                         },
 
                         {
-                            label: 'INLET_TYPE',
+                            label: 'Inlet type',
                             value: 'INLET_TYPE',
                             visibleWhen: {
                                 or: [
                                     { '==': [{ var: 'SOLVER' }, 'EULER'] },
                                     { '==': [{ var: 'SOLVER' }, 'RANS'] },
-                                    { '==': [{ var: 'SOLVER' }, 'INC_EULER'] },
-                                    { '==': [{ var: 'SOLVER' }, 'INC_RANS'] },
                                 ],
                             },
                         },
                         {
-                            label: 'MARKER_INLET',
+                            label: 'Inlet',
                             value: 'MARKER_INLET',
                             visibleWhen: {
                                 or: [
@@ -103,7 +103,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'MARKER_OUTLET',
+                            label: 'Outlet',
                             value: 'MARKER_OUTLET',
                             visibleWhen: {
                                 or: [
@@ -115,7 +115,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'MARKER_SYM',
+                            label: 'Symmetry',
                             value: 'MARKER_SYM',
                             visibleWhen: {
                                 or: [
@@ -127,7 +127,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                             },
                         },
                         {
-                            label: 'MARKER_EULER',
+                            label: 'Slip wall',
                             value: 'MARKER_EULER',
                             visibleWhen: {
                                 or: [
@@ -140,21 +140,21 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                         },
 
                         {
-                            label: 'MARKER_CLAMPED',
+                            label: 'Clamped',
                             value: 'MARKER_CLAMPED',
                             visibleWhen: {
                                 or: [{ '==': [{ var: 'SOLVER' }, 'ELASTICITY'] }],
                             },
                         },
                         {
-                            label: 'MARKER_PRESSURE',
+                            label: 'Normal pressure',
                             value: 'MARKER_PRESSURE',
                             visibleWhen: {
                                 or: [{ '==': [{ var: 'SOLVER' }, 'ELASTICITY'] }],
                             },
                         },
                         {
-                            label: 'MARKER_LOAD',
+                            label: 'Directional load',
                             value: 'MARKER_LOAD',
                             visibleWhen: {
                                 or: [{ '==': [{ var: 'SOLVER' }, 'ELASTICITY'] }],
@@ -177,13 +177,30 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_HEATFLUX',
                     type: QuestionType.text,
-                    title: 'MARKER_HEATFLUX',
+                    title: 'Heatflux boundary',
+                    description: 'Sample: ( wall, 0.0 ) | Corresponds to ( marker, heatflux value)',
                 },
             ],
         },
         {
             key: 'boundary-conditions-group-2',
-            title: 'boundary-conditions-group-2',
+            title: 'Farfield boundaries',
+            type: QuestionType.group,
+            visibleWhen: {
+                or: [{ in: ['MARKER_FAR', { var: 'boundary-conditions-selection' }] }],
+            },
+            children: [
+                {
+                    key: 'MARKER_FAR',
+                    type: QuestionType.text,
+                    title: 'Farfield marker',
+                    description: 'Sample: ( farfield ) | Corresponds to ( marker )',
+                },
+            ],
+        },
+        {
+            key: 'boundary-conditions-group-3',
+            title: 'Incompressible inlet definition',
             type: QuestionType.group,
             visibleWhen: {
                 or: [
@@ -196,16 +213,20 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
             children: [
                 {
                     key: 'INC_INLET_TYPE',
-                    type: QuestionType.numeric,
-                    title: 'INC_INLET_TYPE',
+                    type: QuestionType.buttonList,
+                    title: 'Inlet type',
                     visibleWhen: {
                         or: [{ in: ['INC_INLET_TYPE', { var: 'boundary-conditions-selection' }] }],
                     },
+                    options: [
+                        { label: 'Velocity inlet', value: 'VELOCITY_INLET' },
+                        { label: 'Total pressure inlet', value: 'PRESSURE_INLET' },
+                    ],
                 },
                 {
                     key: 'INC_INLET_DAMPING',
                     type: QuestionType.numeric,
-                    title: 'INC_INLET_DAMPING',
+                    title: 'Inlet damping',
                     visibleWhen: {
                         or: [
                             {
@@ -216,16 +237,20 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 },
                 {
                     key: 'INC_OUTLET_TYPE',
-                    type: QuestionType.numeric,
-                    title: 'INC_OUTLET_TYPE',
+                    type: QuestionType.buttonList,
+                    title: 'Outlet type',
                     visibleWhen: {
                         or: [{ in: ['INC_OUTLET_TYPE', { var: 'boundary-conditions-selection' }] }],
                     },
+                    options: [
+                        { label: 'Gauge pressure', value: 'PRESSURE_OUTLET' },
+                        { label: 'Mass flow', value: 'MASS_FLOW_OUTLET' },
+                    ],
                 },
                 {
                     key: 'INC_OUTLET_DAMPING',
                     type: QuestionType.numeric,
-                    title: 'INC_OUTLET_DAMPING',
+                    title: 'Outlet damping',
                     visibleWhen: {
                         or: [
                             {
@@ -237,27 +262,25 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                         ],
                     },
                 },
-            ],
-        },
-        {
-            key: 'boundary-conditions-group-3',
-            title: 'boundary-conditions-group-3',
-            type: QuestionType.group,
-            visibleWhen: {
-                or: [{ in: ['MARKER_FAR', { var: 'boundary-conditions-selection' }] }],
-            },
-            children: [
                 {
-                    key: 'MARKER_FAR',
-                    type: QuestionType.text,
-                    title: 'MARKER_FAR',
+                    key: 'INLET_TYPE',
+                    type: QuestionType.buttonList,
+                    title: 'Inlet type',
+                    visibleWhen: {
+                        or: [{ in: ['INLET_TYPE', { var: 'boundary-conditions-selection' }] }],
+                    },
+                    options: [
+                        { label: 'Gauge pressure', value: 'TOTAL_CONDITIONS' },
+                        { label: 'Mass flow', value: 'MASS_FLOW' },
+                        { label: 'User input file', value: 'INPUT_FILE' },
+                    ],
                 },
             ],
         },
 
         {
             key: 'boundary-conditions-group-4',
-            title: 'boundary-conditions-group-4',
+            title: 'Inlet boundary conditions',
             type: QuestionType.group,
             visibleWhen: {
                 or: [
@@ -270,17 +293,11 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
             },
             children: [
                 {
-                    key: 'INLET_TYPE',
-                    type: QuestionType.text,
-                    title: 'INLET_TYPE',
-                    visibleWhen: {
-                        or: [{ in: ['INLET_TYPE', { var: 'boundary-conditions-selection' }] }],
-                    },
-                },
-                {
                     key: 'MARKER_INLET',
                     type: QuestionType.text,
-                    title: 'MARKER_INLET',
+                    title: 'Inlet marker list',
+                    description:
+                        'Sample: ( inlet, 288.6, 102010.0, 1.0, 0.0, 0.0 ) | Corresponds to ( marker, temperature, pressure, ux, uy, uz )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_INLET', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -288,7 +305,9 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_OUTLET',
                     type: QuestionType.text,
-                    title: 'MARKER_OUTLET',
+                    title: 'Outlet marker list',
+                    description:
+                        'Sample: ( outlet, 101300.0 ) | Corresponds to ( marker, outlet pressure )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_OUTLET', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -296,7 +315,8 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_SYM',
                     type: QuestionType.text,
-                    title: 'MARKER_SYM',
+                    title: 'Symmetry marker list',
+                    description: 'Sample: ( symmetry ) | Corresponds to ( marker )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_SYM', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -304,7 +324,8 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_EULER',
                     type: QuestionType.text,
-                    title: 'MARKER_EULER',
+                    title: 'No-slip boundary list',
+                    description: 'Sample: ( euler ) | Corresponds to ( marker )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_EULER', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -313,7 +334,8 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
         },
         {
             key: 'boundary-conditions-group-5',
-            title: 'boundary-conditions-group-5',
+            title: 'Structural boundary conditions',
+            description: 'Note that all markers must have a boundary condition',
             type: QuestionType.group,
             visibleWhen: {
                 or: [
@@ -326,7 +348,8 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_CLAMPED',
                     type: QuestionType.text,
-                    title: 'MARKER_CLAMPED',
+                    title: 'Clamped marker list',
+                    description: 'Sample: ( clamped ) | Corresponds to ( marker )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_CLAMPED', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -334,7 +357,8 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_PRESSURE',
                     type: QuestionType.text,
-                    title: 'MARKER_PRESSURE',
+                    title: 'Normal pressure marker list',
+                    description: 'Sample: ( left, 1E3 ) | Corresponds to ( marker, pressure )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_PRESSURE', { var: 'boundary-conditions-selection' }] }],
                     },
@@ -342,7 +366,9 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                 {
                     key: 'MARKER_LOAD',
                     type: QuestionType.text,
-                    title: 'MARKER_LOAD',
+                    title: 'Directional load marker list',
+                    description:
+                        'Sample: ( right, 1.0, 1000, 1, 0, 0) | Corresponds to ( marker, multiplier, load, Px, Py, Pz )',
                     visibleWhen: {
                         or: [{ in: ['MARKER_LOAD', { var: 'boundary-conditions-selection' }] }],
                     },
