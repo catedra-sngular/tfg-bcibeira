@@ -115,7 +115,7 @@ export const WizardQuestionText = (props: QuestionProps<QuestionText>) => {
 
                         <div className='question-text__buttonset'>
                             <Button
-                                className='sugus__button'
+                                className='sugus-button'
                                 disabled={
                                     disabled || minLengthError || maxLengthError || value === null
                                 }
@@ -125,7 +125,7 @@ export const WizardQuestionText = (props: QuestionProps<QuestionText>) => {
                             </Button>
                             {!!answer && (
                                 <Button
-                                    className='sugus__button'
+                                    className='sugus-button'
                                     onClick={handleExitEditMode}
                                     disabled={disabled}
                                 >
