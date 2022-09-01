@@ -35,6 +35,16 @@ def openConn(params):
     address = params['address']
     password = params['password']
 
+def testConnection():
+    ssh_client.exec_command('ls')
+
+def resetConnection():
+    global user, address, password
+
+    user = ''
+    address = ''
+    password = ''
+
 def closeConn(params):
     global user, address, password
     if ssh_client:
@@ -111,6 +121,12 @@ class ConnectionResource(Resource):
         return 'OK', 200
 
     def get(self):
+
+        if (user and address):
+            try:
+                testConnection()
+            except:
+                resetConnection()
 
         response = {
             "user": user,
