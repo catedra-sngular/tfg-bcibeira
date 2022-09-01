@@ -249,6 +249,7 @@ function ServerMessages(props: ConnectionProps) {
                     )}
                     <Button
                         variant='primary'
+                        className='send-files__button'
                         disabled={connectionStatus === ConnType.CLOSE}
                         onClick={() => {
                             sendFiles();
