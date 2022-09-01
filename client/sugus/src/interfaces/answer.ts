@@ -1,4 +1,3 @@
-import { Question } from './question';
 
 export type Answer = {
     key: string;
@@ -6,4 +5,5 @@ export type Answer = {
     section?: string;
     questionTitle?: string;
     internal?: boolean;
+    visibleWhen?: unknown;
 };

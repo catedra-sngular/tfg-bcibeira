@@ -15,6 +15,7 @@ import { Continue } from '../../../components/continue/continue';
 import { WizardComplete } from '../../../components/wizard-complete/wizard-complete';
 import { Wizard } from '../../../components/wizard/wizard';
 import { ConnectionProps } from '../../../interfaces/connection-props';
+import { cleanNoVisibleAnswers } from '../../../helpers/clean-no-visible-answers';
 
 function WizardCreate(props: ConnectionProps) {
     const [answers, setAnswers] = useState<Answer[]>([]);
@@ -54,17 +55,24 @@ function WizardCreate(props: ConnectionProps) {
     };
 
     const handleSetAnswer = (question: Question, value: string | number): void => {
-        if (answers.find((answer: Answer) => answer.key === question.key)) {
-            setAnswers(
-                answers.map((answer: Answer) => {
-                    if (answer.key !== question.key) {
-                        return { ...answer };
-                    }
-                    return { ...answer, value: value, internal: question.internal as boolean };
-                }),
-            );
+        const isUpdate = answers.find((answer: Answer) => answer.key === question.key);
+
+        let updatedAnswers: Answer[] = [];
+
+        if (isUpdate) {
+            updatedAnswers = answers.map((answer: Answer) => {
+                if (answer.key !== question.key) {
+                    return { ...answer };
+                }
+                return {
+                    ...answer,
+                    value: value,
+                    internal: question.internal as boolean,
+                    visibleWhen: question.visibleWhen as unknown,
+                };
+            });
         } else {
-            setAnswers([
+            updatedAnswers = [
                 ...answers,
                 {
                     key: question.key,
@@ -72,9 +80,12 @@ function WizardCreate(props: ConnectionProps) {
                     section: sectionName,
                     questionTitle: question.title,
                     internal: question.internal as boolean,
+                    visibleWhen: question.visibleWhen as unknown,
                 },
-            ]);
+            ];
         }
+
+        setAnswers(cleanNoVisibleAnswers(updatedAnswers));
     };
     const handleDeleteAnswer = (question: Question): void => {
         if (answers.find((answers: Answer) => answers.key === question.key)) {
