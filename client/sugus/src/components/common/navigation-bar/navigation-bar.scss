@@ -48,31 +48,6 @@
 
         &:hover {
             transform: scale(1.03);
-
-            &::after {
-                content: 'Go to connection';
-                position: absolute;
-                display: flex;
-                justify-content: center;
-                top: 130%;
-                margin: 0 0 0 0.4rem;
-                width: 100%;
-                background-color: #bdbdbd;
-                color: rgb(31, 31, 31);
-                padding: 0.4rem;
-                border-radius: 4px;
-            }
-            &::before {
-                content: '';
-                position: absolute;
-                right: 39%;
-                border-radius: 0 50% 50% 50%;
-                transform: rotate(45deg);
-                top: 115%;
-                width: 1.2rem;
-                height: 1.2rem;
-                background-color: #bdbdbd;
-            }
         }
 
         &__icon {
