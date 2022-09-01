@@ -13,9 +13,11 @@ export const NavigationBar = (props: ConnectionProps) => {
     return (
         <nav className='navbar'>
             <Link to='/' className='navbar__logo'>
-                <span className='navbar__logo__first-item'>Su2uS</span>
-                <span className='navbar__logo__second-item'>by</span>
-                <img className='navbar__logo__img-item' src='/assets/logoSU2.png' alt='logo' />
+                <img
+                    className='navbar__logo__img-item'
+                    src='/assets/logo_su2us_subtitle.png'
+                    alt='SU2US'
+                />
             </Link>
 
             <div className='navbar__navigation'>
