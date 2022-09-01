@@ -60,19 +60,19 @@ function ServerConnection(props: ConnectionProps) {
     };
 
     const handleSetUser = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value) {
+        if (event.target.value || event.target.value === '') {
             setUser(event.target.value);
         }
     };
 
     const handleSetAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value) {
+        if (event.target.value || event.target.value === '') {
             setAddress(event.target.value);
         }
     };
 
     const handleSetPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (event.target.value) {
+        if (event.target.value || event.target.value === '') {
             setPassword(event.target.value);
         }
     };

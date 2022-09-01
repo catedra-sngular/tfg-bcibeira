@@ -1,22 +1,27 @@
-import './wizard-continue.scss';
+import './wizard-page.scss';
 import { tap } from 'rxjs';
 import { useEffect, useRef, useState } from 'react';
-import { Answer } from '../../../interfaces/answer';
-import { WizardSection } from '../../../interfaces/wizard-section';
+import { Answer } from '../../interfaces/answer';
+import { WizardSection } from '../../interfaces/wizard-section';
 import {
     WizardSectionSummary,
     WizardSectionSummaryItem,
-} from '../../../interfaces/wizard-section-summary';
-import { getSection, getSectionSummary } from '../../../mocks/questions.mock';
-import { Question } from '../../../interfaces/question';
-import { Button } from 'react-bootstrap';
-import { Continue } from '../../../components/continue/continue';
-import { WizardComplete } from '../../../components/wizard-complete/wizard-complete';
-import { Wizard } from '../../../components/wizard/wizard';
-import { ConnectionProps } from '../../../interfaces/connection-props';
-import { cleanNoVisibleAnswers } from '../../../helpers/clean-no-visible-answers';
+} from '../../interfaces/wizard-section-summary';
+import { getSection, getSectionSummary } from '../../mocks/questions.mock';
+import { Question } from '../../interfaces/question';
+import { Button, Modal } from 'react-bootstrap';
+import { Continue } from '../../components/continue/continue';
+import { WizardComplete } from '../../components/wizard-complete/wizard-complete';
+import { Wizard } from '../../components/wizard/wizard';
+import { ConnectionProps } from '../../interfaces/connection-props';
+import { cleanNoVisibleAnswers } from '../../helpers/clean-no-visible-answers';
 
-function WizardContinue(props: ConnectionProps) {
+interface WizardPageProps {
+    props: ConnectionProps;
+    isNewWizard: boolean;
+}
+
+function WizardPage({ props, isNewWizard }: WizardPageProps) {
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [isComplete, setIsComplete] = useState<boolean>(false);
     const [isWizardDisabled, setIsWizardDisabled] = useState<boolean>(false);
@@ -25,6 +30,7 @@ function WizardContinue(props: ConnectionProps) {
     const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
     const [sectionSummary, setSectionSummary] = useState<WizardSectionSummary>();
     const [configFile, setConfigFile] = useState<File>(props.connectionState.configFile as File);
+    const [showModal, setShowModal] = useState<boolean>(!isNewWizard);
 
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -55,9 +61,26 @@ function WizardContinue(props: ConnectionProps) {
         }
     }, [sectionName]);
 
-    const handleBackToWelcomePage = (): void => {
+    useEffect(() => {
+        if (isNewWizard) {
+            cleanWizard();
+            setSectionName('solver-type');
+        } else {
+            setShowModal(true);
+        }
+    }, [isNewWizard]);
+
+    const cleanWizard = () => {
+        // setSection(undefined);
+        // setSectionSummary(undefined);
         setSectionName(undefined);
         setAnswers([]);
+        // setIsComplete(false);
+    };
+
+    const handleCancelUpload = () => {
+        setShowModal(false);
+        setSectionName('solver-type');
     };
 
     const handleSetAnswer = (question: Question, value: string | number): void => {
@@ -90,7 +113,6 @@ function WizardContinue(props: ConnectionProps) {
                 },
             ];
         }
-
         setAnswers(cleanNoVisibleAnswers(updatedAnswers));
     };
     const handleDeleteAnswer = (question: Question): void => {
@@ -147,6 +169,7 @@ function WizardContinue(props: ConnectionProps) {
             setSectionName('solver-type');
         };
         fileReader.readAsText(configFile as Blob);
+        setShowModal(false);
     };
 
     const getAnsweredQuestionForSection = (
@@ -197,7 +220,7 @@ function WizardContinue(props: ConnectionProps) {
                             </div>
                         </div>
                     )}
-                    {!section && (
+                    {/* {!section && (
                         <div className='info-container'>
                             <h1>Upload your config file</h1>
                             <p>
@@ -241,11 +264,65 @@ function WizardContinue(props: ConnectionProps) {
                                 </div>
                             )}
                         </div>
-                    )}
+                    )} */}
+                    <Modal
+                        show={showModal}
+                        size='lg'
+                        aria-labelledby='contained-modal-title-vcenter'
+                        centered
+                    >
+                        <Modal.Header closeButton>
+                            <Modal.Title id='contained-modal-title-vcenter'>
+                                Select a config file
+                            </Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <div className='my-3 files-selector d-flex flex-row'>
+                                <span className='mt-3 mr-4 d-flex flex-column'>
+                                    <input
+                                        ref={hiddenConfigFileInputRef}
+                                        className='hide_input_file'
+                                        type='file'
+                                        name='file'
+                                        onChange={(event) => {
+                                            if (event.target.files) {
+                                                setConfigFile(event.target?.files[0]);
+                                            }
+                                        }}
+                                    ></input>
+
+                                    <span>
+                                        <Button
+                                            className='button'
+                                            variant={configFile ? 'success' : 'secondary'}
+                                            onClick={() => {
+                                                handleSelectConfigFile(hiddenConfigFileInputRef);
+                                            }}
+                                        >
+                                            {configFile
+                                                ? 'Select another config file'
+                                                : 'Select config file'}
+                                        </Button>
+                                    </span>
+                                    {configFile && <p>Selected file: {configFile.name}</p>}
+                                </span>
+                            </div>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button onClick={handleSubmission}>{'Confirm & Start'}</Button>
+                            <Button variant='secondary' onClick={handleCancelUpload}>
+                                Cancel
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
                     {!!section && (
                         <>
-                            {section.title && <h1>{section.title}</h1>}
-                            {section.description && <p>{section.description}</p>}
+                            {section.title && (
+                                <h1 className='wizard-create__title'>{section.title}</h1>
+                            )}
+                            {section.description && (
+                                <p className='wizard-create__description'>{section.description}</p>
+                            )}
                             <Wizard
                                 questions={section.groups}
                                 answers={answers}
@@ -267,10 +344,6 @@ function WizardContinue(props: ConnectionProps) {
                 </div>
                 {!!section && (
                     <div className='answers_container'>
-                        <Button variant='light' onClick={handleBackToWelcomePage}>
-                            Back to welcome page
-                        </Button>
-
                         {answers.length > 0 && (
                             <>
                                 <h2>Answers summary</h2>
@@ -294,4 +367,4 @@ function WizardContinue(props: ConnectionProps) {
     );
 }
 
-export default WizardContinue;
+export default WizardPage;

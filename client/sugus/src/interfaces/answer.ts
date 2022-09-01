@@ -1,4 +1,3 @@
-
 export type Answer = {
     key: string;
     value: string | number;
