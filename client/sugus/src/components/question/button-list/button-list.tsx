@@ -63,6 +63,7 @@ export const WizardQuestionButtonList = (props: QuestionProps<QuestionButtonList
                             }
                             onClick={() => handleSelectOption(option.value)}
                             disabled={disabled}
+                            className='button-list__item'
                         >
                             {option.label}
                         </Button>

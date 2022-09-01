@@ -172,8 +172,10 @@ function WizardCreate(props: ConnectionProps) {
                 )}
                 {!!section && (
                     <>
-                        {section.title && <h1>{section.title}</h1>}
-                        {section.description && <p>{section.description}</p>}
+                        {section.title && <h1 className='wizard-create__title'>{section.title}</h1>}
+                        {section.description && (
+                            <p className='wizard-create__description'>{section.description}</p>
+                        )}
                         <Wizard
                             questions={section.groups}
                             answers={answers}
@@ -195,7 +197,11 @@ function WizardCreate(props: ConnectionProps) {
             </div>
             {!!section && (
                 <div className='answers_container'>
-                    <Button variant='light' onClick={handleBackToWelcomePage}>
+                    <Button
+                        variant='light'
+                        className='wizard-create__button'
+                        onClick={handleBackToWelcomePage}
+                    >
                         Back to initial page
                     </Button>
 

@@ -1,13 +1,13 @@
-  .greeting {
+.greeting {
     text-align: center;
     margin-top: 20px;
-  }
+}
 
-  .main-container {
+.main-container {
     display: flex;
     flex-direction: row;
     min-height: 100vh;
-    height: 100%;
+    height: auto;
     margin-bottom: 32px;
     width: auto;
     // margin-left: 0; pone un margen de agún lado siempre
@@ -15,108 +15,104 @@
     padding-right: 0 !important;
 
     .wizard_container {
-      flex-grow: 1;
-      padding: 16px;
-
+        flex-grow: 1;
+        padding: 16px;
     }
     .answers_container {
-      flex-grow: 0;
-      flex-shrink: 0;
-    //   flex-basis: 45rem;
-      background-color: rgb(255, 255, 255);
-      color: #000000 !important;
-      padding: 8px;
-    //   position: fixed;
-      height: 100vh;
-      overflow: scroll;
-      right: 0px;
-      width: 30%;
-      margin-bottom: 16px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        //   flex-basis: 45rem;
+        background-color: rgb(255, 255, 255);
+        color: #000000 !important;
+        padding: 8px;
+        //   position: fixed;
+        height: 100vh;
+        overflow: scroll;
+        right: 0px;
+        width: 30%;
+        margin-bottom: 16px;
 
-      .section {
+        .section {
+            &.current {
+                background-color: white;
+                border: 1px solid black;
+                box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+                border-radius: 8px;
+                margin-bottom: 16px;
+            }
 
-        &.current {
-          background-color: white;
-          border: 1px solid black;
-          box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-          border-radius: 8px;
-          margin-bottom: 16px;
+            &__title {
+                padding: 0 8px;
+                display: flex;
+                flex-direction: row;
+                border-bottom: 1px solid black;
+                justify-content: space-between;
+                align-items: center;
+
+                h1 {
+                    font-size: 16px;
+                }
+            }
+
+            p {
+                margin: 0.5rem 0;
+                padding: 0 8px;
+            }
         }
-
-        &__title {
-          padding: 0 8px;
-          display: flex;
-          flex-direction: row;
-          border-bottom: 1px solid black;
-          justify-content: space-between;
-          align-items: center;
-
-          h1 {
-            font-size: 16px;
-          }
-
-        }
-
-        p {
-          margin: 0.5rem 0;
-          padding: 0 8px;
-        }
-      }
     }
-  }
+}
 
-  .loading-questions {
+.loading-questions {
     &-wrapper {
-      position: fixed;
-      top: 0px;
-      left: 0px;
-      z-index: 10;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0, 0.1);
-      display: grid;
-      place-items:  center;
-      backdrop-filter: blur(10px);
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        z-index: 10;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.1);
+        display: grid;
+        place-items: center;
+        backdrop-filter: blur(10px);
     }
 
     &-container {
-      border: 1px solid gray;
-      border-radius: 8px;
-      text-align: center;
-      width: 20rem;
-      height: 10rem;
-      background-color: white;
-      font-size: 24px;
-      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-      display: flex;
-      display: grid;
-      place-items:  center;
-      padding-top: 16px;
+        border: 1px solid gray;
+        border-radius: 8px;
+        text-align: center;
+        width: 20rem;
+        height: 10rem;
+        background-color: white;
+        font-size: 24px;
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        display: flex;
+        display: grid;
+        place-items: center;
+        padding-top: 16px;
 
-      img {
-        width: 64px;
-        height: 64px;
-      }
-
+        img {
+            width: 64px;
+            height: 64px;
+        }
     }
-  }
+}
 
-  .hide_input_file {
+.hide_input_file {
     display: none;
-  }
+}
 
-  .section__buttonset {
+.section__buttonset {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     padding: 0px 32px;
-  }
+}
 
-  .files-selector {
+.files-selector {
     height: 80px;
-  }
+}
 
-  .info-container {
+.info-container {
     padding: 35px 50px 25px 50px;
     padding-left: 50px;
     border-radius: 50px;
@@ -126,3 +122,31 @@
     margin-top: 20%;
 }
 
+.wizard-create {
+    &__title {
+        font-size: 5rem;
+        margin-bottom: 2rem;
+    }
+    &__description {
+        font-size: 1.6rem;
+    }
+    &__button {
+        width: 100%;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        background-color: #9f0030;
+        font-size: 1.8rem;
+        padding: 1.4rem 6rem;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 1rem auto 2.8rem auto;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #b31644;
+        }
+    }
+}

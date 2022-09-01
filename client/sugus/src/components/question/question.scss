@@ -1,14 +1,14 @@
 .question {
     margin-bottom: 32px;
     &__title {
-        font-size: 20px;
+        font-size: 1.8rem;
         font-weight: bold;
         margin-bottom: 1rem;
         display: flex;
         align-items: center;
         &__group {
-            font-size: 24px;
-            border-bottom: 1px solid black;
+            font-size: 2.4rem;
+            border-bottom: 1px solid rgb(35, 35, 35);
         }
     }
 
@@ -31,18 +31,20 @@
         }
     }
 
-    .icon__help {
+    .icon-help {
         background-color: white;
         border: 2px solid black;
-        display: inline-block;
-        width: 1.5rem;
-        height: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2.5rem;
+        height: 2.5rem;
         line-height: 1.5rem;
         text-align: center;
-        border-radius: 1rem;
+        border-radius: 50%;
         cursor: pointer;
         margin-left: 1rem;
-        font-size: 1rem;
+        font-size: 1.6rem;
 
         &:hover {
             background-color: #dedede;
@@ -53,9 +55,10 @@
         margin-bottom: 16px;
 
         .error {
-            color: red;
-            font-size: 16px;
+            color: #b31644;
+            font-size: 1.6rem;
             font-weight: bold;
+            margin-top: 0.8rem;
         }
 
         .hint {
