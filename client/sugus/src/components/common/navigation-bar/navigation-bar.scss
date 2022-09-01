@@ -12,6 +12,7 @@
         align-items: center;
         gap: 0.6rem;
         color: #000000;
+        width: 20%;
 
         &__first-item {
             font-size: 4.8rem;
@@ -31,16 +32,19 @@
 
     &__navigation {
         display: flex;
+        justify-content: flex-end;
         gap: 4rem;
-        margin-right: -80rem;
+        width: 60%;
     }
 
     &__connection-status {
         display: flex;
+        justify-content: flex-end;
         align-items: center;
         gap: 1.2rem;
         margin-top: 0.4rem;
         transition: 0.2s ease-in;
+        width: 20rem;
 
         &:hover {
             transform: scale(1.03);

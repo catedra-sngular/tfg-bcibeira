@@ -22,7 +22,9 @@ export const Continue = (props: ContinueProps) => {
 
     return (
         <div className='section__buttonset' ref={continueRef}>
-            <Button onClick={handleContinueButton}>Next section</Button>
+            <Button onClick={handleContinueButton} className='section__buttonset__button'>
+                Next section
+            </Button>
         </div>
     );
 };

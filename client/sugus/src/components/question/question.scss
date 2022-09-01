@@ -1,5 +1,5 @@
 .question {
-    margin-bottom: 32px;
+    margin: 3.2rem 0;
     &__title {
         font-size: 1.8rem;
         font-weight: bold;
@@ -62,8 +62,10 @@
         }
 
         .hint {
-            color: gray;
-            font-size: 15px;
+            color: rgb(52, 52, 52);
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-top: 0.8rem;
         }
     }
 }

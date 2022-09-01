@@ -231,7 +231,7 @@ function ServerMessages(props: ConnectionProps) {
                         </span>
                     </div>
                     <div>
-                        <label>Messages frecuency:</label>
+                        <label className='send-files__input-label'>Messages frecuency:</label>
                         <div className='select mb-3'>
                             <select className='form-select' onChange={handleOptionChange}>
                                 <option>2</option>
@@ -239,7 +239,9 @@ function ServerMessages(props: ConnectionProps) {
                                 <option>4</option>
                                 <option>5</option>
                             </select>
-                            <span className='mx-3'>(seconds)</span>
+                            <span className='mx-3' style={{ fontSize: '1.4rem' }}>
+                                (seconds)
+                            </span>
                         </div>
                     </div>
                     {connectionStatus === ConnType.CLOSE && configFile && meshFile && (

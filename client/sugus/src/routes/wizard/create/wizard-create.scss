@@ -106,6 +106,26 @@
     flex-direction: row;
     justify-content: flex-end;
     padding: 0px 32px;
+
+    &__button {
+        width: 100%;
+        outline: none;
+        border: none;
+        border-radius: 8px;
+        background-color: #9f0030;
+        font-size: 1.8rem;
+        padding: 1.4rem 6rem;
+        color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem auto 0 auto;
+        cursor: pointer;
+
+        &:hover {
+            background-color: #b31644;
+        }
+    }
 }
 
 .files-selector {
