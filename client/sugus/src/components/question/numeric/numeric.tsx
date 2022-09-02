@@ -94,7 +94,7 @@ export const WizardQuestionNumeric = (props: QuestionProps<QuestionNumeric>) => 
                             autoFocus
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
-                            value={value || ''}
+                            value={value || value === 0 ? value : ''}
                         />
 
                         <div className='question-numeric__buttonset'>
