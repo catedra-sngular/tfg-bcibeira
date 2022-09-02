@@ -29,6 +29,7 @@ export const NavigationBar = (props: ConnectionProps) => {
                         {
                             label: 'Send Files',
                             path: '/server/messages',
+                            disabled: !isConnected(),
                         },
                     ]}
                 />

@@ -6,6 +6,7 @@ import './dropdown.scss';
 export interface DropdownOption {
     label: string;
     path: string;
+    disabled?: boolean;
 }
 
 interface DropdownProps {
@@ -51,14 +52,21 @@ export const Dropdown = ({ label, options }: DropdownProps) => {
                             return (
                                 <>
                                     <li key={index} className='dropdown__submenu__item'>
-                                        <Link
-                                            to={option.path}
-                                            className='dropdown__submenu__item__link'
-                                        >
-                                            <span className='dropdown__submenu__item__label'>
+                                        {option.disabled && (
+                                            <span className='dropdown__submenu__item__label dropdown__submenu__item__label--disabled'>
                                                 {option.label}
                                             </span>
-                                        </Link>
+                                        )}
+                                        {!option.disabled && (
+                                            <Link
+                                                to={option.path}
+                                                className='dropdown__submenu__item__link'
+                                            >
+                                                <span className='dropdown__submenu__item__label'>
+                                                    {option.label}
+                                                </span>
+                                            </Link>
+                                        )}
                                     </li>
                                     {options && options.length > 1 ? (
                                         <span className='dropdown__submenu__item__separation'></span>
