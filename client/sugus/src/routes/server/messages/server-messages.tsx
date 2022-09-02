@@ -18,6 +18,7 @@ function ServerMessages(props: ConnectionProps) {
     const [waitingData, setWaitingData] = useState<boolean>(false);
     const [sendingFiles, setSendingFiles] = useState<boolean>(false);
     const [showServerError, setShowServerError] = useState<boolean>(false);
+    const [isConnectionOwner, setIsConnectionOwner] = useState<boolean>();
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
     const hiddenMeshFileInputRef = useRef<HTMLInputElement>(null);
     const resultRef = useRef<HTMLDivElement>(null);
@@ -40,6 +41,12 @@ function ServerMessages(props: ConnectionProps) {
         }
         if (props.connectionState.configFile) {
             setConfigFile(props.connectionState.configFile);
+        }
+
+        const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
+
+        if (isConnectionOwnerStorage) {
+            setIsConnectionOwner(JSON.parse(isConnectionOwnerStorage) as boolean);
         }
     }, []);
 
@@ -73,7 +80,8 @@ function ServerMessages(props: ConnectionProps) {
             waitingData ||
             sendingFiles ||
             !configFile ||
-            !meshFile
+            !meshFile ||
+            !isConnectionOwner
         );
     };
 
@@ -278,6 +286,13 @@ function ServerMessages(props: ConnectionProps) {
                     {showServerError && (
                         <Alert className='alert-primary my-3'>
                             <p>Sorry, SU2 is not running</p>
+                        </Alert>
+                    )}
+
+                    {!isConnectionOwner && (
+                        <Alert className='alert-primary my-3'>
+                            <p>Insufficient permissions.</p>
+                            <p>Server connection has been created by other user</p>
                         </Alert>
                     )}
                     <Button

@@ -14,6 +14,7 @@ function ServerConnection(props: ConnectionProps) {
     const [address, setAddress] = useState('');
     const [showError, setShowError] = useState(false);
     const [isConnecting, setIsConnecting] = useState(false);
+    const [isConnectionOwner, setIsConnectionOwner] = useState<boolean>();
     const [connectionStatus, setConnectionStatus] = useState<ConnType>(ConnType.CLOSE);
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
@@ -25,11 +26,20 @@ function ServerConnection(props: ConnectionProps) {
         } else {
             setConnectionStatus(ConnType.CLOSE);
         }
+        const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
+
+        if (isConnectionOwnerStorage) {
+            setIsConnectionOwner(JSON.parse(isConnectionOwnerStorage) as boolean);
+        }
     }, []);
 
     useEffect(() => {
         updateState();
     }, [connectionStatus]);
+
+    useEffect(() => {
+        localStorage.setItem('isConnectionOwner', JSON.stringify(isConnectionOwner));
+    }, [isConnectionOwner]);
 
     const isConnected = () => {
         return !!props.connectionState.user && !!props.connectionState.address;
@@ -106,7 +116,12 @@ function ServerConnection(props: ConnectionProps) {
                 const messg = params.connType ? 'connection created' : 'disconnected';
                 setConnectionStatus(params.connType || ConnType.CLOSE);
                 console.log(messg);
-                setIsConnecting(false);
+                if (params.connType === ConnType.OPEN) {
+                    setIsConnecting(false);
+                    setIsConnectionOwner(true);
+                } else {
+                    setIsConnectionOwner(false);
+                }
                 clearPassword();
             })
             .catch(function (error) {
