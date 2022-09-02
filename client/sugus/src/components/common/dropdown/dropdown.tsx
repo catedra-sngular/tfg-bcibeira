@@ -59,6 +59,7 @@ export const Dropdown = ({ label, options }: DropdownProps) => {
                                         )}
                                         {!option.disabled && (
                                             <Link
+                                                onClick={handleToggleSubmenu}
                                                 to={option.path}
                                                 className='dropdown__submenu__item__link'
                                             >

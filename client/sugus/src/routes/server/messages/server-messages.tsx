@@ -265,7 +265,7 @@ function ServerMessages(props: ConnectionProps) {
                         {!sendingFiles && !waitingData && <span>Send Files</span>}
                         {(sendingFiles || waitingData) && (
                             <div className='loading-button'>
-                                <img alt='loading' src='/assets/spinner-btn.gif'></img>
+                                <img alt='loading' src='/assets/loader.gif'></img>
                                 {sendingFiles && (
                                     <span className='loading-label'>Sending files. . .</span>
                                 )}
@@ -287,7 +287,7 @@ function ServerMessages(props: ConnectionProps) {
                     </div>
                     {waitingData && (
                         <div className='loading-table-container'>
-                            <img alt='loading' src='/assets/square2.gif'></img>
+                            <img alt='loading' src='/assets/loader.gif'></img>
                             <span className='loading-label'>Waiting for data. . .</span>
                         </div>
                     )}
