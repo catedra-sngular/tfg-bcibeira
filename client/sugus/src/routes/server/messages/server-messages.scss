@@ -100,3 +100,15 @@
         }
     }
 }
+
+.loading-table-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-label {
+    color: #ffffff;
+    font-size: 20px;
+}
