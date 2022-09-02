@@ -38,7 +38,7 @@ def readQueue(queue):
     sleep(2)
     method, properties, body = channel.basic_get(queue)
 
-    return json.loads(body)['data'] if method else 'Any message yet'
+    return json.loads(body)['data'] if method else 'No messages yet'
 
 
 def obtainFolder():
