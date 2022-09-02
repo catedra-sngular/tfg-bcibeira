@@ -13,6 +13,7 @@ function ServerConnection(props: ConnectionProps) {
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
     const [showError, setShowError] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
     const [connectionStatus, setConnectionStatus] = useState<ConnType>(ConnType.CLOSE);
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
@@ -92,6 +93,7 @@ function ServerConnection(props: ConnectionProps) {
             params.address = address;
             params.user = user;
             params.password = password;
+            setIsConnecting(true);
         } else {
             params.connType = ConnType.CLOSE;
             params.password = password;
@@ -104,12 +106,15 @@ function ServerConnection(props: ConnectionProps) {
                 const messg = params.connType ? 'connection created' : 'disconnected';
                 setConnectionStatus(params.connType || ConnType.CLOSE);
                 console.log(messg);
+                setIsConnecting(false);
+                clearPassword();
             })
             .catch(function (error) {
+                setIsConnecting(false);
                 setShowError(true);
                 console.log('connection error');
+                clearPassword();
             });
-        clearPassword();
     };
 
     return (
@@ -186,7 +191,13 @@ function ServerConnection(props: ConnectionProps) {
                         connection();
                     }}
                 >
-                    {isConnected() ? 'Disconnect' : 'Connect'}
+                    {isConnecting && (
+                        <div className='loading-button'>
+                            <img alt='loading' src='/assets/loader.gif'></img>
+                            <span className='loading-label'>Connecting. . .</span>
+                        </div>
+                    )}
+                    {!isConnecting && <span>{isConnected() ? 'Disconnect' : 'Connect'}</span>}
                 </Button>
             </div>
         </div>
