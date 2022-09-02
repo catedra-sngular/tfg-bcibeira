@@ -58,7 +58,7 @@ export const Slider = () => {
                                 Manage server connection.
                             </p>
                             <Link to='/server/connection' className='slider__item__caption__button'>
-                                <span>Set Connection</span>
+                                <span>Change Connection</span>
                             </Link>
                         </div>
                     </Carousel.Caption>
@@ -77,12 +77,12 @@ export const Slider = () => {
 
                     <Carousel.Caption>
                         <div className='slider__item__caption'>
-                            <h1 className='slider__item__caption__title'>Transfer File</h1>
+                            <h1 className='slider__item__caption__title'>Transfer Files</h1>
                             <p className='slider__item__caption__description'>
-                                Send file to a server and launch SU2
+                                Send files to a server and launch SU2
                             </p>
                             <Link to='/server/messages' className='slider__item__caption__button'>
-                                <span>Send File</span>
+                                <span>Send Files</span>
                             </Link>
                         </div>
                     </Carousel.Caption>
@@ -127,7 +127,7 @@ export const Slider = () => {
                         <div className='slider__item__caption'>
                             <h1 className='slider__item__caption__title'>Upload File</h1>
                             <p className='slider__item__caption__description'>
-                                {'Upload & edit a file'}
+                                {'Upload & edit a config file'}
                             </p>
                             <Link to='/wizard/continue' className='slider__item__caption__button'>
                                 <span>Upload File</span>
