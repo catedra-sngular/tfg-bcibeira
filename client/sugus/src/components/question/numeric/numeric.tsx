@@ -33,9 +33,19 @@ export const WizardQuestionNumeric = (props: QuestionProps<QuestionNumeric>) => 
     const handleKeyDown = (event: any) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (event.key === 'Enter') {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
-            event.preventDefault();
-            handleSendValue();
+            if (
+                !(
+                    value === null ||
+                    minError ||
+                    maxError ||
+                    disabled ||
+                    (value !== null && isNaN(value))
+                )
+            ) {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+                event.preventDefault();
+                handleSendValue();
+            }
         }
     };
 
@@ -94,6 +104,7 @@ export const WizardQuestionNumeric = (props: QuestionProps<QuestionNumeric>) => 
                             autoFocus
                             onChange={handleChange}
                             onKeyDown={handleKeyDown}
+                            value={value || value === 0 ? value : ''}
                         />
 
                         <div className='question-numeric__buttonset'>
