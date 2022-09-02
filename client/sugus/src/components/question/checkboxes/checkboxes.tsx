@@ -6,6 +6,7 @@ import { QuestionCheckboxes } from '../../../interfaces/question';
 import { QuestionOption } from '../../../interfaces/question-option';
 import { QuestionProps } from '../../../interfaces/question-props';
 import Button from 'react-bootstrap/Button';
+import './checkboxes.scss';
 import * as jsonLogic from 'json-logic-js';
 
 export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes>) => {
@@ -101,7 +102,7 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
     };
 
     return (
-        <div className='question-button-list'>
+        <div className='question-checkbox'>
             {question.loading && <div>Loading options</div>}
 
             {!editMode && (

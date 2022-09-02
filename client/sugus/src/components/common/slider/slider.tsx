@@ -55,8 +55,7 @@ export const Slider = () => {
                         <div className='slider__item__caption'>
                             <h1 className='slider__item__caption__title'>Connection</h1>
                             <p className='slider__item__caption__description'>
-                                Manage server connection Lorem ipsum dolor sit amet consectetur
-                                adipisicing elit. Natus, reiciendis.
+                                Manage server connection.
                             </p>
                             <Link to='/server/connection' className='slider__item__caption__button'>
                                 <span>Set Connection</span>

@@ -215,7 +215,7 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                     {loadingQuestions && (
                         <div className='loading-questions-wrapper'>
                             <div className='loading-questions-container'>
-                                <img alt='loading' src='/assets/loading.gif'></img>
+                                <img alt='loading' src='/assets/loader.gif'></img>
                                 <p>Loading questions</p>
                             </div>
                         </div>

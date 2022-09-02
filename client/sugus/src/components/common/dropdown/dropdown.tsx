@@ -52,6 +52,7 @@ export const Dropdown = ({ label, options }: DropdownProps) => {
                                 <>
                                     <li key={index} className='dropdown__submenu__item'>
                                         <Link
+                                            onClick={handleToggleSubmenu}
                                             to={option.path}
                                             className='dropdown__submenu__item__link'
                                         >

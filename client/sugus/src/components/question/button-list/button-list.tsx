@@ -59,7 +59,7 @@ export const WizardQuestionButtonList = (props: QuestionProps<QuestionButtonList
                             variant={
                                 currentAnswer && option.value === currentAnswer.value
                                     ? 'primary'
-                                    : 'outline-secondary'
+                                    : 'secondary'
                             }
                             onClick={() => handleSelectOption(option.value)}
                             disabled={disabled}

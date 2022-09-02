@@ -23,7 +23,6 @@
         flex-grow: 0;
         flex-shrink: 0;
         //   flex-basis: 45rem;
-        background-color: transparent;
         color: #000000 !important;
         padding: 2rem;
         //   position: fixed;
@@ -31,6 +30,7 @@
         overflow: auto;
         right: 0px;
         width: 30%;
+        background-color: #c4c4c4;
 
         &__title {
             font-size: 2rem;
@@ -79,22 +79,19 @@
     }
 
     &-container {
-        border: 1px solid gray;
         border-radius: 8px;
         text-align: center;
         width: 20rem;
         height: 10rem;
-        background-color: white;
         font-size: 24px;
-        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
         display: flex;
         display: grid;
         place-items: center;
         padding-top: 16px;
 
         img {
-            width: 64px;
-            height: 64px;
+            width: 10rem;
+            height: 10rem;
         }
     }
 }
