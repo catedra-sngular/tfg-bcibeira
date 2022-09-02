@@ -6,7 +6,7 @@
 .main-container {
     display: flex;
     flex-direction: row;
-    min-height: 100vh;
+    min-height: calc(100% - 10rem);
     height: auto;
     margin-bottom: 32px;
     width: auto;
@@ -17,46 +17,48 @@
     .wizard_container {
         flex-grow: 1;
         padding: 16px;
+        background-color: #ffffff;
     }
     .answers_container {
         flex-grow: 0;
         flex-shrink: 0;
         //   flex-basis: 45rem;
-        background-color: rgb(255, 255, 255);
         color: #000000 !important;
-        padding: 8px;
+        padding: 2rem;
         //   position: fixed;
-        height: 100vh;
-        overflow: scroll;
+        height: auto;
+        overflow: auto;
         right: 0px;
         width: 30%;
-        margin-bottom: 16px;
+        background-color: #c4c4c4;
+
+        &__title {
+            font-size: 2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
         .section {
             &.current {
                 background-color: white;
                 border: 1px solid black;
                 box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-                border-radius: 8px;
-                margin-bottom: 16px;
+                border-radius: 0.4rem;
+                margin: 2rem 0 1.6rem 0;
             }
 
             &__title {
-                padding: 0 8px;
+                padding: 0.8rem;
                 display: flex;
                 flex-direction: row;
                 border-bottom: 1px solid black;
                 justify-content: space-between;
                 align-items: center;
-
-                h1 {
-                    font-size: 16px;
-                }
             }
 
             p {
                 margin: 0.5rem 0;
-                padding: 0 8px;
+                padding: 0.8rem;
             }
         }
     }
@@ -77,22 +79,19 @@
     }
 
     &-container {
-        border: 1px solid gray;
         border-radius: 8px;
         text-align: center;
         width: 20rem;
         height: 10rem;
-        background-color: white;
         font-size: 24px;
-        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
         display: flex;
         display: grid;
         place-items: center;
         padding-top: 16px;
 
         img {
-            width: 64px;
-            height: 64px;
+            width: 10rem;
+            height: 10rem;
         }
     }
 }
@@ -105,7 +104,6 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
-    padding: 0px 32px;
 
     &__button {
         width: 100%;
@@ -129,7 +127,7 @@
 }
 
 .files-selector {
-    height: 80px;
+    height: 6rem;
 }
 
 .info-container {
@@ -144,11 +142,13 @@
 
 .wizard-create {
     &__title {
-        font-size: 5rem;
+        font-size: 4.6rem;
         margin-bottom: 2rem;
+        padding: 2rem 0 0 1.6rem;
     }
     &__description {
         font-size: 1.6rem;
+        padding: 0 0 0 1.6rem;
     }
     &__button {
         width: 100%;
@@ -168,5 +168,18 @@
         &:hover {
             background-color: #b31644;
         }
+    }
+}
+
+.btn-outline-secondary {
+    font-size: 1.6rem;
+    padding: 0.4rem 1.4rem;
+    color: #ffffff;
+    background-color: #9f0030;
+    border: none;
+
+    &:hover {
+        background-color: #b31644;
+        color: #ffffff;
     }
 }

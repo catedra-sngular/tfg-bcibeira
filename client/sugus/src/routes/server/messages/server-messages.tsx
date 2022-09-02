@@ -13,6 +13,8 @@ function ServerMessages(props: ConnectionProps) {
     const [table, setTable] = useState<JSX.Element>();
     const [delay, setDelay] = useState<string>();
     const [connectionStatus, setConnectionStatus] = useState<ConnType>();
+    const [waitingData, setWaitingData] = useState<boolean>(false);
+    const [sendingFiles, setSendingFiles] = useState<boolean>(false);
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
     const hiddenMeshFileInputRef = useRef<HTMLInputElement>(null);
     const resultRef = useRef<HTMLDivElement>(null);
@@ -64,6 +66,7 @@ function ServerMessages(props: ConnectionProps) {
 
     const sendFiles = () => {
         if (configFile && meshFile) {
+            setSendingFiles(true);
             const formData = new FormData();
 
             // Update the formData object
@@ -83,6 +86,7 @@ function ServerMessages(props: ConnectionProps) {
                     }, parseInt(delay || DEFAULT_DELAY, 10) * 1000);
                 })
                 .catch(function (error) {
+                    setSendingFiles(false);
                     console.log(error);
                 });
         }
@@ -97,11 +101,14 @@ function ServerMessages(props: ConnectionProps) {
                 .then(function (response) {
                     if (!(response.data as string).includes('Any messages yet')) {
                         // console.log(response.data);
+                        setSendingFiles(false);
+                        setWaitingData(true);
                         const table = loadTable(response.data as string);
                         // console.log(table);
                         setTable(table);
                         if ((response.data as string).includes('EOF')) {
                             clearInterval(messaggeInterval);
+                            setWaitingData(false);
                         }
                     }
                 })
@@ -249,12 +256,26 @@ function ServerMessages(props: ConnectionProps) {
                     )}
                     <Button
                         variant='primary'
-                        disabled={connectionStatus === ConnType.CLOSE}
+                        className='send-files__button'
+                        disabled={connectionStatus === ConnType.CLOSE || waitingData}
                         onClick={() => {
                             sendFiles();
                         }}
                     >
-                        Send Files
+                        {!sendingFiles && !waitingData && <span>Send Files</span>}
+                        {(sendingFiles || waitingData) && (
+                            <div className='loading-button'>
+                                <img alt='loading' src='/assets/loader.gif'></img>
+                                {sendingFiles && (
+                                    <span className='loading-label'>Sending files. . .</span>
+                                )}
+                                {waitingData && (
+                                    <span className='loading-label'>
+                                        Waiting for finish execution
+                                    </span>
+                                )}
+                            </div>
+                        )}
                     </Button>
                 </div>
             </div>
@@ -264,6 +285,12 @@ function ServerMessages(props: ConnectionProps) {
                         <h1>Server Results</h1>
                         {table}
                     </div>
+                    {waitingData && (
+                        <div className='loading-table-container'>
+                            <img alt='loading' src='/assets/loader.gif'></img>
+                            <span className='loading-label'>Waiting for data. . .</span>
+                        </div>
+                    )}
                 </div>
             )}
         </>

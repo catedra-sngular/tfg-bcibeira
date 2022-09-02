@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import { ConnectionProps } from '../../../interfaces/connection-props';
 import { ConnType } from '../../../interfaces/connection-type';
+import { AiOutlineLock } from 'react-icons/ai';
+import { MdAlternateEmail } from 'react-icons/md';
 
 function ServerConnection(props: ConnectionProps) {
     const [user, setUser] = useState('');
@@ -131,7 +133,9 @@ function ServerConnection(props: ConnectionProps) {
                         value={user}
                         onChange={handleSetUser}
                     />
-                    <span className='input-group-text'>@</span>
+                    <span className='input-group-text'>
+                        <MdAlternateEmail />
+                    </span>
                     <input
                         style={getInputStyle()}
                         disabled={isConnected()}
@@ -145,7 +149,7 @@ function ServerConnection(props: ConnectionProps) {
                 </div>
                 <div className='input-group my-3'>
                     <span className='input-group-text'>
-                        <i className='bi bi-lock'></i>
+                        <AiOutlineLock />
                     </span>
                     <input
                         type='password'

@@ -1,0 +1,12 @@
+.question-checkbox {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: wrap;
+
+    .sugus {
+        &__button {
+            font-size: 1.6rem;
+        }
+    }
+}

@@ -191,7 +191,7 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
             answeredQuestionsForSection.length > 0 && (
                 <div className={section.name !== sectionName ? 'section' : 'section current'}>
                     <div className='section__title'>
-                        <h1>{section.title} </h1>
+                        <h1 style={{ fontSize: '2rem' }}>{section.title} </h1>
                         {section.name !== sectionName && (
                             <Button
                                 variant='outline-secondary'
@@ -202,7 +202,7 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                         )}
                     </div>
 
-                    {answeredQuestionsForSection}
+                    <div style={{ fontSize: '1.4rem' }}>{answeredQuestionsForSection}</div>
                 </div>
             )
         );
@@ -215,7 +215,7 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                     {loadingQuestions && (
                         <div className='loading-questions-wrapper'>
                             <div className='loading-questions-container'>
-                                <img alt='loading' src='/assets/loading.gif'></img>
+                                <img alt='loading' src='/assets/loader.gif'></img>
                                 <p>Loading questions</p>
                             </div>
                         </div>
@@ -346,7 +346,7 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                     <div className='answers_container'>
                         {answers.length > 0 && (
                             <>
-                                <h2>Answers summary</h2>
+                                <h2 className='answers_container__title'>Answers summary</h2>
 
                                 <div>
                                     {sectionSummary?.sections
