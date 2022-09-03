@@ -1,6 +1,8 @@
 import './home.scss';
 import { Slider } from '../../components/common/slider/slider';
-function Home() {
+import { ConnectionProps } from '../../interfaces/connection-props';
+
+function Home(props: ConnectionProps) {
     return (
         <>
             {/* <div className='greeting'>
@@ -12,7 +14,7 @@ function Home() {
                 </p>
             </div> */}
 
-            <Slider></Slider>
+            <Slider connectionState={props.connectionState}></Slider>
             {/* <div className='home__su2'>
                 <h1 className='home__su2__title'>Welcome to Su2uS</h1>
                 <div style={{ display: 'flex' }}>

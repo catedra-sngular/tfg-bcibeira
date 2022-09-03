@@ -1,8 +1,13 @@
 import { Carousel } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { ConnectionProps } from '../../../interfaces/connection-props';
 import './slider.scss';
 
-export const Slider = () => {
+export const Slider = (props: ConnectionProps) => {
+    const isConnected = () => {
+        return !!props.connectionState.user && !!props.connectionState.address;
+    };
+
     return (
         <Carousel className='slider'>
             <Carousel.Item>
@@ -55,7 +60,7 @@ export const Slider = () => {
                         <div className='slider__item__caption'>
                             <h1 className='slider__item__caption__title'>Connection</h1>
                             <p className='slider__item__caption__description'>
-                                Manage server connection.
+                                Manages server connection.
                             </p>
                             <Link to='/server/connection' className='slider__item__caption__button'>
                                 <span>Change Connection</span>
@@ -79,11 +84,21 @@ export const Slider = () => {
                         <div className='slider__item__caption'>
                             <h1 className='slider__item__caption__title'>Transfer Files</h1>
                             <p className='slider__item__caption__description'>
-                                Send files to a server and launch SU2
+                                Sends files to a server and launch SU2
                             </p>
-                            <Link to='/server/messages' className='slider__item__caption__button'>
-                                <span>Send Files</span>
-                            </Link>
+                            {!isConnected() && (
+                                <div className='slider__item__caption__button--disabled'>
+                                    <span>Send Files</span>
+                                </div>
+                            )}
+                            {isConnected() && (
+                                <Link
+                                    to='/server/messages'
+                                    className='slider__item__caption__button'
+                                >
+                                    <span>Send Files</span>
+                                </Link>
+                            )}
                         </div>
                     </Carousel.Caption>
                 </div>
@@ -127,7 +142,7 @@ export const Slider = () => {
                         <div className='slider__item__caption'>
                             <h1 className='slider__item__caption__title'>Upload File</h1>
                             <p className='slider__item__caption__description'>
-                                {'Upload & edit a config file'}
+                                {'Uploads & edits a config file'}
                             </p>
                             <Link to='/wizard/continue' className='slider__item__caption__button'>
                                 <span>Upload File</span>

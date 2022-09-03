@@ -200,7 +200,7 @@ function ServerConnection(props: ConnectionProps) {
 
                 <Button
                     className='connection-page__container__button'
-                    disabled={!password}
+                    disabled={!password || !user || !address}
                     // variant={isConnected() ? 'primary' : 'light'}
                     onClick={() => {
                         connection();
