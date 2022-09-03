@@ -8,6 +8,11 @@ import { Alert } from 'react-bootstrap';
 
 const DEFAULT_DELAY = '2';
 const MAX_SERVER_TRIES = 5;
+const INITIAL_HEADER = [
+    <th key={'header-empty'} scope='col'>
+        {'-'}
+    </th>,
+];
 
 function ServerMessages(props: ConnectionProps) {
     const [configFile, setConfigFile] = useState<File>();
@@ -22,14 +27,10 @@ function ServerMessages(props: ConnectionProps) {
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
     const hiddenMeshFileInputRef = useRef<HTMLInputElement>(null);
     const resultRef = useRef<HTMLDivElement>(null);
-    const header: JSX.Element[] = [
-        <th key={'header-empty'} scope='col'>
-            {'-'}
-        </th>,
-    ];
-    const body: JSX.Element[] = [];
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
+    let header: JSX.Element[] = [...INITIAL_HEADER];
+    let body: JSX.Element[] = [];
     let messagesInterval: NodeJS.Timer;
     let serverTries = 0;
 
@@ -86,6 +87,9 @@ function ServerMessages(props: ConnectionProps) {
     };
 
     const sendFiles = () => {
+        setTable(undefined);
+        header = [...INITIAL_HEADER];
+        body = [];
         setShowServerError(false);
         setSendingFiles(true);
         const formData = new FormData();
@@ -116,7 +120,10 @@ function ServerMessages(props: ConnectionProps) {
             axios
                 .get(apiUrl + '/api/v1.0/message/' + hash)
                 .then(function (response) {
-                    if (!(response.data as string).includes('No messages yet')) {
+                    if (
+                        !(response.data as string).includes('No messages yet') &&
+                        !(response.data as string).includes('null')
+                    ) {
                         if (serverTries !== 0) {
                             serverTries = 0;
                         }
@@ -132,8 +139,10 @@ function ServerMessages(props: ConnectionProps) {
                         if (serverTries === MAX_SERVER_TRIES) {
                             clearInterval(messagesInterval);
                             setSendingFiles(false);
+                            setWaitingData(false);
                             serverTries = 0;
                             setShowServerError(true);
+                            setTable(undefined);
                         } else {
                             serverTries++;
                         }
@@ -144,11 +153,14 @@ function ServerMessages(props: ConnectionProps) {
                     clearInterval(messagesInterval);
                     setSendingFiles(false);
                     setShowServerError(true);
+                    setTable(undefined);
                 });
         } else {
             clearInterval(messagesInterval);
             setSendingFiles(false);
+            setWaitingData(false);
             setShowServerError(true);
+            setTable(undefined);
         }
     };
 
@@ -173,7 +185,7 @@ function ServerMessages(props: ConnectionProps) {
             const data = [];
 
             for (let iterator = 0; iterator < line.length; iterator++) {
-                if (body.length === 0 && index === 0) {
+                if (header.length <= line.length && index === 0) {
                     header.push(
                         <th key={`header-${iterator}`} scope='col'>
                             {line[iterator].trim()}

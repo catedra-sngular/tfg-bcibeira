@@ -72,6 +72,10 @@ export const SOLUTION_OUTPUT: QuestionFamily = {
                     key: 'TABULAR_FORMAT',
                     type: QuestionType.buttonList,
                     title: 'TABULAR_FORMAT',
+                    options: [
+                        { label: 'TECPLOT', value: 'TECPLOT' },
+                        { label: 'CSV', value: 'CSV' },
+                    ],
                 },
                 {
                     key: 'CONV_FILENAME',
