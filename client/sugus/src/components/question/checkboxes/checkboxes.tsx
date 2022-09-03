@@ -106,8 +106,8 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
             {question.loading && <div>Loading options</div>}
 
             {!editMode && (
-                <div>
-                    {selectedOptions.join(', ')}
+                <div className='question-checkbox__options'>
+                    <span>{selectedOptions.join(', ')}</span>
                     <Button className='sugus__button' onClick={handleChangeValue}>
                         Change value
                     </Button>
@@ -130,7 +130,7 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                             variant={
                                 answer && selectedOptions.includes(option.value)
                                     ? 'primary'
-                                    : 'outline-secondary'
+                                    : 'secondary'
                             }
                             onClick={() => toggleCheckOption(option.value)}
                             disabled={disabled}
@@ -138,6 +138,7 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                             <input
                                 type='checkbox'
                                 checked={selectedOptions.includes(option.value)}
+                                onChange={() => console.log('check')}
                             ></input>
                             {option.label}
                         </Button>

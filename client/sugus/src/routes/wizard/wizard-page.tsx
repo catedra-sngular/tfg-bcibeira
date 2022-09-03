@@ -15,6 +15,7 @@ import { WizardComplete } from '../../components/wizard-complete/wizard-complete
 import { Wizard } from '../../components/wizard/wizard';
 import { ConnectionProps } from '../../interfaces/connection-props';
 import { cleanNoVisibleAnswers } from '../../helpers/clean-no-visible-answers';
+import { BsFileEarmarkArrowUp } from 'react-icons/bs';
 
 interface WizardPageProps {
     props: ConnectionProps;
@@ -273,13 +274,16 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                         onHide={handleCancelUpload}
                     >
                         <Modal.Header closeButton>
-                            <Modal.Title id='contained-modal-title-vcenter'>
-                                <h1>Select a config file</h1>
+                            <Modal.Title
+                                id='contained-modal-title-vcenter'
+                                className='wizard-modal__title'
+                            >
+                                Select a config file
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
                             <div className='my-3 files-selector d-flex flex-row'>
-                                <span className='mt-3 mr-4 d-flex flex-column'>
+                                <div className='mt-3 mr-4 d-flex flex-column'>
                                     <input
                                         ref={hiddenConfigFileInputRef}
                                         className='hide_input_file'
@@ -292,7 +296,8 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                                         }}
                                     ></input>
 
-                                    <span>
+                                    <div className='modal-body__content'>
+                                        <BsFileEarmarkArrowUp></BsFileEarmarkArrowUp>
                                         <Button
                                             className='button'
                                             variant={configFile ? 'success' : 'secondary'}
@@ -304,9 +309,9 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                                                 ? 'Select another config file'
                                                 : 'Select config file'}
                                         </Button>
-                                    </span>
-                                    {configFile && <p>Selected file: {configFile.name}</p>}
-                                </span>
+                                        {configFile && <p>Selected file: {configFile.name}</p>}
+                                    </div>
+                                </div>
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
@@ -347,8 +352,19 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                     <div className='answers_container'>
                         {answers.length > 0 && (
                             <>
-                                <h2 className='answers_container__title'>Answers summary</h2>
-
+                                <div className='answers_container_header'>
+                                    <h2 className='answers_container_header__title'>
+                                        Answers summary
+                                    </h2>
+                                    {!isNewWizard && (
+                                        <span
+                                            className='answers_container_header__btn'
+                                            onClick={() => setShowModal(true)}
+                                        >
+                                            Change uploaded file
+                                        </span>
+                                    )}
+                                </div>
                                 <div>
                                     {sectionSummary?.sections
                                         .slice()
