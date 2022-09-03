@@ -270,10 +270,11 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                         size='lg'
                         aria-labelledby='contained-modal-title-vcenter'
                         centered
+                        onHide={handleCancelUpload}
                     >
                         <Modal.Header closeButton>
                             <Modal.Title id='contained-modal-title-vcenter'>
-                                Select a config file
+                                <h1>Select a config file</h1>
                             </Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
