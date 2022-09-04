@@ -46,8 +46,10 @@ function ServerMessages(props: ConnectionProps) {
 
         const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
 
-        if (isConnectionOwnerStorage) {
-            setIsConnectionOwner(JSON.parse(isConnectionOwnerStorage) as boolean);
+        if (isConnectionOwnerStorage === 'true') {
+            setIsConnectionOwner(true);
+        } else {
+            setIsConnectionOwner(false);
         }
     }, []);
 
