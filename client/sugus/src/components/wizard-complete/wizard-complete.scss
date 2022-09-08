@@ -3,7 +3,7 @@
     color: black;
     width: calc(100% - 3em);
     max-width: 48em;
-    padding: 1em 1em 1em 1.5em;
+    padding: 2.4rem;
     border: 1px solid darkolivegreen;
     border-left-width: 6px;
     border-left-style: solid;
@@ -23,6 +23,11 @@
         display: flex;
         justify-content: flex-end;
         gap: 1rem;
+        margin-top: 3rem;
+
+        button {
+            font-size: 1.8rem;
+        }
     }
 
     border-left-color: darkolivegreen;
@@ -41,6 +46,7 @@
         text-align: center;
         background-color: darkolivegreen;
         content: '✔';
+        font-size: 2rem;
     }
 }
 

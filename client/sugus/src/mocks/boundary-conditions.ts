@@ -18,7 +18,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
                     type: QuestionType.checkboxes,
                     options: [
                         {
-                            label: 'No-slip wall',
+                            label: 'Heatflux wall',
                             value: 'MARKER_HEATFLUX',
                             visibleWhen: {
                                 or: [
@@ -168,7 +168,7 @@ export const BOUNDARY_CONDITIONS: QuestionFamily = {
 
         {
             key: 'boundary-conditions-group-1',
-            title: 'boundary-conditions-group-1',
+            title: 'Heatflux boundary',
             type: QuestionType.group,
             visibleWhen: {
                 or: [{ in: ['MARKER_HEATFLUX', { var: 'boundary-conditions-selection' }] }],

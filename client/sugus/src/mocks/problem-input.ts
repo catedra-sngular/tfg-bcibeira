@@ -24,6 +24,7 @@ export const PROBLEM_INPUT = {
                     title: 'Mesh filename',
                     minLength: 4,
                     maxLength: 64,
+                    default: 'mesh.su2',
                 },
             ],
         },

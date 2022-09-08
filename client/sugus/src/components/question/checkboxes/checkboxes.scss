@@ -3,6 +3,17 @@
     flex-direction: row;
     gap: 16px;
     flex-wrap: wrap;
+    height: 4.8rem;
+
+    &__options {
+        display: flex;
+        align-items: center;
+        span {
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+    }
 
     .sugus {
         &__button {

@@ -4,8 +4,15 @@ import Button from 'react-bootstrap/Button';
 import { useEffect, useRef, useState } from 'react';
 import { ConnectionProps } from '../../../interfaces/connection-props';
 import { ConnType } from '../../../interfaces/connection-type';
+import { Alert } from 'react-bootstrap';
 
 const DEFAULT_DELAY = '2';
+const MAX_SERVER_TRIES = 5;
+const INITIAL_HEADER = [
+    <th key={'header-empty'} scope='col'>
+        {'-'}
+    </th>,
+];
 
 function ServerMessages(props: ConnectionProps) {
     const [configFile, setConfigFile] = useState<File>();
@@ -15,19 +22,17 @@ function ServerMessages(props: ConnectionProps) {
     const [connectionStatus, setConnectionStatus] = useState<ConnType>();
     const [waitingData, setWaitingData] = useState<boolean>(false);
     const [sendingFiles, setSendingFiles] = useState<boolean>(false);
+    const [showServerError, setShowServerError] = useState<boolean>(false);
+    const [isConnectionOwner, setIsConnectionOwner] = useState<boolean>();
     const hiddenConfigFileInputRef = useRef<HTMLInputElement>(null);
     const hiddenMeshFileInputRef = useRef<HTMLInputElement>(null);
     const resultRef = useRef<HTMLDivElement>(null);
-
-    const header: JSX.Element[] = [
-        <th key={'header-empty'} scope='col'>
-            {'-'}
-        </th>,
-    ];
-    const body: JSX.Element[] = [];
-
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
-    let messaggeInterval: NodeJS.Timer;
+
+    let header: JSX.Element[] = [...INITIAL_HEADER];
+    let body: JSX.Element[] = [];
+    let messagesInterval: NodeJS.Timer;
+    let serverTries = 0;
 
     useEffect(() => {
         if (props.connectionState.user && props.connectionState.address) {
@@ -37,6 +42,14 @@ function ServerMessages(props: ConnectionProps) {
         }
         if (props.connectionState.configFile) {
             setConfigFile(props.connectionState.configFile);
+        }
+
+        const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
+
+        if (isConnectionOwnerStorage === 'true') {
+            setIsConnectionOwner(true);
+        } else {
+            setIsConnectionOwner(false);
         }
     }, []);
 
@@ -64,65 +77,98 @@ function ServerMessages(props: ConnectionProps) {
         }
     };
 
+    const isSendBlocked = () => {
+        return (
+            connectionStatus === ConnType.CLOSE ||
+            waitingData ||
+            sendingFiles ||
+            !configFile ||
+            !meshFile ||
+            !isConnectionOwner
+        );
+    };
+
     const sendFiles = () => {
-        if (configFile && meshFile) {
-            setSendingFiles(true);
-            const formData = new FormData();
+        setTable(undefined);
+        header = [...INITIAL_HEADER];
+        body = [];
+        setShowServerError(false);
+        setSendingFiles(true);
+        const formData = new FormData();
 
-            // Update the formData object
-            formData.append('configFile', configFile, configFile?.name);
+        // Update the formData object
+        formData.append('configFile', configFile as File, configFile?.name);
 
-            // Update the formData object
-            formData.append('meshFile', meshFile, meshFile?.name);
+        // Update the formData object
+        formData.append('meshFile', meshFile as File, meshFile?.name);
 
-            formData.append('delay', delay || DEFAULT_DELAY);
+        formData.append('delay', delay || DEFAULT_DELAY);
 
-            axios
-                .post(apiUrl + '/api/v1.0/file/', formData)
-                .then(function (response) {
-                    // console.log(response);
-                    messaggeInterval = setInterval(() => {
-                        getMessage(response.data as string);
-                    }, parseInt(delay || DEFAULT_DELAY, 10) * 1000);
-                })
-                .catch(function (error) {
-                    setSendingFiles(false);
-                    console.log(error);
-                });
-        }
+        axios
+            .post(apiUrl + '/api/v1.0/file/', formData)
+            .then(function (response) {
+                messagesInterval = setInterval(() => {
+                    getMessage(response.data as string);
+                }, parseInt(delay || DEFAULT_DELAY, 10) * 1000);
+            })
+            .catch(function (error) {
+                setSendingFiles(false);
+                console.log(error);
+            });
     };
 
     const getMessage = (hash: string) => {
-        // console.log('1234');
         if (hash) {
-            // console.log('5678');
             axios
                 .get(apiUrl + '/api/v1.0/message/' + hash)
                 .then(function (response) {
-                    if (!(response.data as string).includes('Any messages yet')) {
-                        // console.log(response.data);
+                    if (
+                        !(response.data as string).includes('No messages yet') &&
+                        !(response.data as string).includes('null')
+                    ) {
+                        if (serverTries !== 0) {
+                            serverTries = 0;
+                        }
+                        const table = loadTable(response.data as string);
                         setSendingFiles(false);
                         setWaitingData(true);
-                        const table = loadTable(response.data as string);
-                        // console.log(table);
                         setTable(table);
                         if ((response.data as string).includes('EOF')) {
-                            clearInterval(messaggeInterval);
+                            clearInterval(messagesInterval);
                             setWaitingData(false);
+                        }
+                    } else {
+                        if (serverTries === MAX_SERVER_TRIES) {
+                            clearInterval(messagesInterval);
+                            setSendingFiles(false);
+                            setWaitingData(false);
+                            serverTries = 0;
+                            setShowServerError(true);
+                            setTable(undefined);
+                        } else {
+                            serverTries++;
                         }
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
+                    clearInterval(messagesInterval);
+                    setSendingFiles(false);
+                    setShowServerError(true);
+                    setTable(undefined);
                 });
+        } else {
+            clearInterval(messagesInterval);
+            setSendingFiles(false);
+            setWaitingData(false);
+            setShowServerError(true);
+            setTable(undefined);
         }
     };
 
     const parseData = (data: string) => {
         if (data) {
             const messages: string[] = data.split('\n').filter((message: string) => message !== '');
-            // console.log('mssgs: ', messages);
-
             const messagesMatrix: string[][] = [];
 
             messages.forEach((line: string) => {
@@ -141,7 +187,7 @@ function ServerMessages(props: ConnectionProps) {
             const data = [];
 
             for (let iterator = 0; iterator < line.length; iterator++) {
-                if (body.length === 0 && index === 0) {
+                if (header.length <= line.length && index === 0) {
                     header.push(
                         <th key={`header-${iterator}`} scope='col'>
                             {line[iterator].trim()}
@@ -165,9 +211,6 @@ function ServerMessages(props: ConnectionProps) {
                 );
             }
         });
-
-        // console.log(header);
-        // console.log(body);
 
         return (
             <table className='table'>
@@ -254,10 +297,22 @@ function ServerMessages(props: ConnectionProps) {
                     {connectionStatus === ConnType.CLOSE && configFile && meshFile && (
                         <div className='alert alert-info'>You must connect to a server first</div>
                     )}
+                    {showServerError && (
+                        <Alert className='alert-primary my-3'>
+                            <p>Sorry, SU2 is not running</p>
+                        </Alert>
+                    )}
+
+                    {!isConnectionOwner && (
+                        <Alert className='alert-primary my-3'>
+                            <p>Insufficient permissions.</p>
+                            <p>Server connection has been created by other user</p>
+                        </Alert>
+                    )}
                     <Button
                         variant='primary'
                         className='send-files__button'
-                        disabled={connectionStatus === ConnType.CLOSE || waitingData}
+                        disabled={isSendBlocked()}
                         onClick={() => {
                             sendFiles();
                         }}

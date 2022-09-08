@@ -71,18 +71,20 @@
         border-radius: 0.8rem;
         font-size: 1.4rem;
 
-        & th {
-            padding: 1rem 4rem;
+        td, th {
+            padding: 1rem !important;
         }
     }
 }
 
 .file-button {
     width: auto;
+    justify-content: center;
 }
 
 .file-descriptor {
     text-align: center;
+    margin-top: 0px !important;
 }
 
 .form-select {

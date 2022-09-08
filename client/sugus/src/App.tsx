@@ -59,7 +59,7 @@ function App() {
         <>
             <NavigationBar connectionState={state.connectionState}></NavigationBar>
             <Routes>
-                <Route path='/' element={<Home />} />
+                <Route path='/' element={<Home connectionState={state.connectionState} />} />
                 <Route
                     path='wizard/create'
                     element={<WizardPage props={state} isNewWizard={true} />}

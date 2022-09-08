@@ -13,6 +13,8 @@ function ServerConnection(props: ConnectionProps) {
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
     const [showError, setShowError] = useState(false);
+    const [isConnecting, setIsConnecting] = useState(false);
+    const [isConnectionOwner, setIsConnectionOwner] = useState<boolean>();
     const [connectionStatus, setConnectionStatus] = useState<ConnType>(ConnType.CLOSE);
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
@@ -24,11 +26,22 @@ function ServerConnection(props: ConnectionProps) {
         } else {
             setConnectionStatus(ConnType.CLOSE);
         }
+        const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
+
+        if (isConnectionOwnerStorage === 'true') {
+            setIsConnectionOwner(true);
+        } else {
+            setIsConnectionOwner(false);
+        }
     }, []);
 
     useEffect(() => {
         updateState();
     }, [connectionStatus]);
+
+    useEffect(() => {
+        localStorage.setItem('isConnectionOwner', JSON.stringify(isConnectionOwner));
+    }, [isConnectionOwner]);
 
     const isConnected = () => {
         return !!props.connectionState.user && !!props.connectionState.address;
@@ -92,6 +105,7 @@ function ServerConnection(props: ConnectionProps) {
             params.address = address;
             params.user = user;
             params.password = password;
+            setIsConnecting(true);
         } else {
             params.connType = ConnType.CLOSE;
             params.password = password;
@@ -104,12 +118,20 @@ function ServerConnection(props: ConnectionProps) {
                 const messg = params.connType ? 'connection created' : 'disconnected';
                 setConnectionStatus(params.connType || ConnType.CLOSE);
                 console.log(messg);
+                if (params.connType === ConnType.OPEN) {
+                    setIsConnecting(false);
+                    setIsConnectionOwner(true);
+                } else {
+                    setIsConnectionOwner(false);
+                }
+                clearPassword();
             })
             .catch(function (error) {
+                setIsConnecting(false);
                 setShowError(true);
                 console.log('connection error');
+                clearPassword();
             });
-        clearPassword();
     };
 
     return (
@@ -180,13 +202,19 @@ function ServerConnection(props: ConnectionProps) {
 
                 <Button
                     className='connection-page__container__button'
-                    disabled={!password}
+                    disabled={!password || !user || !address}
                     // variant={isConnected() ? 'primary' : 'light'}
                     onClick={() => {
                         connection();
                     }}
                 >
-                    {isConnected() ? 'Disconnect' : 'Connect'}
+                    {isConnecting && (
+                        <div className='loading-button'>
+                            <img alt='loading' src='/assets/loader.gif'></img>
+                            <span className='loading-label'>Connecting. . .</span>
+                        </div>
+                    )}
+                    {!isConnecting && <span>{isConnected() ? 'Disconnect' : 'Connect'}</span>}
                 </Button>
             </div>
         </div>
