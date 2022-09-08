@@ -45,30 +45,6 @@ export const SOLVER_TYPE: QuestionFamily = {
                     ],
                 },
                 {
-                    key: 'SA_OPTIONS',
-                    type: QuestionType.checkboxes,
-                    title: 'Options and corrections for the SA turbulence model',
-                    visibleWhen: {
-                        or: [{ '==': [{ var: 'KIND_TURB_MODEL' }, 'SA'] }],
-                    },
-                    options: [
-                        { label: 'Default SA', value: 'NONE' },
-                        { label: 'Negative SA', value: 'NEG' },
-                        { label: 'Edwards version', value: 'EDW' },
-                        { label: 'Use FT2 term', value: 'FT2' },
-                        { label: 'Quadratic constitutive relation', value: 'QCR2000' },
-                        { label: 'Compressibility correction', value: 'COMP' },
-                        { label: 'Rotation correction', value: 'ROT' },
-                        { label: 'Bas-Cakmakcioclu transition', value: 'BC' },
-                        {
-                            label: 'Experimental combination according to TMR.',
-                            value: 'EXPERIMENTAL',
-                        },
-                    ],
-                    minSelected: 1,
-                    default: 'NONE',
-                },
-                {
                     key: 'GEOMETRIC_CONDITIONS',
                     type: QuestionType.buttonList,
                     title: 'Geometric conditions',

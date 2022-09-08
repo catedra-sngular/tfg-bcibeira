@@ -217,8 +217,8 @@ export const SOLUTION_STRATEGY: QuestionFamily = {
                     title: 'Time discretization',
                     options: [
                         { label: 'Explicit RK', value: 'RUNGE-KUTTA_EXPLICIT' },
-                        { label: 'Explicit Euler', value: 'EULER_IMPLICIT' },
-                        { label: 'Implicit', value: 'EULER_EXPLICIT' },
+                        { label: 'Explicit Euler', value: 'EULER_EXPLICIT' },
+                        { label: 'Implicit', value: 'EULER_IMPLICIT' },
                     ],
                 },
             ],
@@ -268,8 +268,8 @@ export const SOLUTION_STRATEGY: QuestionFamily = {
                     title: 'Time discretization',
                     options: [
                         { label: 'Explicit RK', value: 'RUNGE-KUTTA_EXPLICIT' },
-                        { label: 'Explicit Euler', value: 'EULER_IMPLICIT' },
-                        { label: 'Implicit', value: 'EULER_EXPLICIT' },
+                        { label: 'Explicit Euler', value: 'EULER_EXPLICIT' },
+                        { label: 'Implicit', value: 'EULER_IMPLICIT' },
                     ],
                 },
             ],

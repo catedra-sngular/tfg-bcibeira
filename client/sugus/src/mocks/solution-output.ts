@@ -17,7 +17,7 @@ export const SOLUTION_OUTPUT: QuestionFamily = {
                     options: [
                         { label: 'Restart', value: 'RESTART' },
                         { label: 'Paraview', value: 'PARAVIEW' },
-                        { label: 'History', value: 'HISTORY' },
+                        { label: 'History', value: 'CSV' },
                         { label: 'Screen', value: 'SCREEN' },
                         { label: 'Solution', value: 'SOLUTION' },
                         { label: 'Volume', value: 'VOLUME' },
