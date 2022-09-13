@@ -6,6 +6,7 @@ export interface ConnectionProps {
         setAddress: React.Dispatch<React.SetStateAction<string>>;
         configFile: File | undefined;
         setConfigFile: React.Dispatch<React.SetStateAction<File | undefined>>;
-        dataLoaded: boolean;
+        statusChangedOutside: boolean;
+        setStatusChangedOutside: React.Dispatch<React.SetStateAction<boolean>>;
     };
 }

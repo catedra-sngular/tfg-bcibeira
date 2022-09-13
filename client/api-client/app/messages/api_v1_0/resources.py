@@ -109,7 +109,10 @@ class ConnectionResource(Resource):
         conn_dict.pop('connType')
         try:
             if type == ConnType.OPEN:
-                openConn(conn_dict)
+                if (not user or not address or not password):
+                    openConn(conn_dict)
+                else:
+                    return 'Create conection is unavailable', 503
             if type == ConnType.CLOSE:
                 closeConn(conn_dict)
             if type != ConnType.OPEN & type != ConnType.CLOSE:
