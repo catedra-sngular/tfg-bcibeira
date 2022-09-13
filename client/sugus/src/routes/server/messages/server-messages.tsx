@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ConnectionProps } from '../../../interfaces/connection-props';
 import { ConnType } from '../../../interfaces/connection-type';
 import { Alert } from 'react-bootstrap';
+import { updateConnectionStatus } from '../../../helpers/update-connection-status';
 
 const DEFAULT_DELAY = '2';
 const MAX_SERVER_TRIES = 5;
@@ -14,7 +15,11 @@ const INITIAL_HEADER = [
     </th>,
 ];
 
-function ServerMessages(props: ConnectionProps) {
+interface ServerMessagesProps {
+    props: ConnectionProps;
+}
+
+function ServerMessages({ props }: ServerMessagesProps) {
     const [configFile, setConfigFile] = useState<File>();
     const [meshFile, setMeshFile] = useState<File>();
     const [table, setTable] = useState<JSX.Element>();
@@ -35,6 +40,8 @@ function ServerMessages(props: ConnectionProps) {
     let serverTries = 0;
 
     useEffect(() => {
+        updateConnectionStatus(props);
+
         if (props.connectionState.user && props.connectionState.address) {
             setConnectionStatus(ConnType.OPEN);
         } else {

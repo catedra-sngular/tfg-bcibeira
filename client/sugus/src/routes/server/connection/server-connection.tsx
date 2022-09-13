@@ -7,8 +7,13 @@ import { ConnectionProps } from '../../../interfaces/connection-props';
 import { ConnType } from '../../../interfaces/connection-type';
 import { AiOutlineLock } from 'react-icons/ai';
 import { MdAlternateEmail } from 'react-icons/md';
+import { updateConnectionStatus } from '../../../helpers/update-connection-status';
 
-function ServerConnection(props: ConnectionProps) {
+interface ServerConnectionProps {
+    props: ConnectionProps;
+}
+
+function ServerConnection({ props }: ServerConnectionProps) {
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
     const [address, setAddress] = useState('');
@@ -19,13 +24,8 @@ function ServerConnection(props: ConnectionProps) {
     const apiUrl: string = process.env.REACT_APP_API_URL as string;
 
     useEffect(() => {
-        setUser(props.connectionState.user);
-        setAddress(props.connectionState.address);
-        if (props.connectionState.user && props.connectionState.address) {
-            setConnectionStatus(ConnType.OPEN);
-        } else {
-            setConnectionStatus(ConnType.CLOSE);
-        }
+        updateConnectionStatus(props);
+
         const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
 
         if (isConnectionOwnerStorage === 'true') {
@@ -36,8 +36,20 @@ function ServerConnection(props: ConnectionProps) {
     }, []);
 
     useEffect(() => {
-        updateState();
-    }, [connectionStatus]);
+        if (user !== props.connectionState.user || address !== props.connectionState.address) {
+            setUser(props.connectionState.user);
+            setAddress(props.connectionState.address);
+            setIsConnectionOwner(false);
+
+            if (props.connectionState.user && props.connectionState.address) {
+                setConnectionStatus(ConnType.OPEN);
+            } else {
+                setConnectionStatus(ConnType.CLOSE);
+            }
+
+            console.log('user: ', user, connectionStatus);
+        }
+    }, [props]);
 
     useEffect(() => {
         localStorage.setItem('isConnectionOwner', JSON.stringify(isConnectionOwner));
@@ -45,16 +57,6 @@ function ServerConnection(props: ConnectionProps) {
 
     const isConnected = () => {
         return !!props.connectionState.user && !!props.connectionState.address;
-    };
-
-    const updateState = () => {
-        if (connectionStatus === ConnType.OPEN) {
-            props.connectionState.setUser(user);
-            props.connectionState.setAddress(address);
-        } else {
-            props.connectionState.setUser('');
-            props.connectionState.setAddress('');
-        }
     };
 
     const clearPassword = () => {
@@ -121,8 +123,12 @@ function ServerConnection(props: ConnectionProps) {
                 if (params.connType === ConnType.OPEN) {
                     setIsConnecting(false);
                     setIsConnectionOwner(true);
+                    props.connectionState.setUser(user);
+                    props.connectionState.setAddress(address);
                 } else {
                     setIsConnectionOwner(false);
+                    props.connectionState.setUser('');
+                    props.connectionState.setAddress('');
                 }
                 clearPassword();
             })
