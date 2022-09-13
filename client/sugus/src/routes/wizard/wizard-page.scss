@@ -6,8 +6,7 @@
 .main-container {
     display: flex;
     flex-direction: row;
-    min-height: calc(100% - 10rem);
-    height: auto;
+    height: calc(100% - 10rem);
     margin-bottom: 32px;
     width: auto;
     // margin-left: 0; pone un margen de agún lado siempre
@@ -18,7 +17,9 @@
         flex-grow: 1;
         padding: 16px;
         background-color: #ffffff;
+        overflow-y: auto;
     }
+
     .answers_container {
         flex-grow: 0;
         flex-shrink: 0;
