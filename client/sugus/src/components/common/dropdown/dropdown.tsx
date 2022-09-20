@@ -35,7 +35,7 @@ export const Dropdown = ({ label, options }: DropdownProps) => {
     };
 
     return (
-        <div className='dropdown' ref={wrapperRef}>
+        <div className='dropdown' data-cy='dropdown-button' ref={wrapperRef}>
             <div className='dropdown__button' onClick={handleToggleSubmenu}>
                 <span className='dropdown__button__label'>{label}</span>
                 {openSubmenu ? (
@@ -51,7 +51,11 @@ export const Dropdown = ({ label, options }: DropdownProps) => {
                         options.map((option: DropdownOption, index: number) => {
                             return (
                                 <>
-                                    <li key={index} className='dropdown__submenu__item'>
+                                    <li
+                                        key={index}
+                                        className='dropdown__submenu__item'
+                                        data-cy='dropdown-submenu-link'
+                                    >
                                         {option.disabled && (
                                             <span className='dropdown__submenu__item__label dropdown__submenu__item__label--disabled'>
                                                 {option.label}

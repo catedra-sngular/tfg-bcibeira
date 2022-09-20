@@ -64,6 +64,7 @@ export const WizardQuestionButtonList = (props: QuestionProps<QuestionButtonList
                             onClick={() => handleSelectOption(option.value)}
                             disabled={disabled}
                             className='button-list__item'
+                            data-cy={question.key}
                         >
                             {option.label}
                         </Button>

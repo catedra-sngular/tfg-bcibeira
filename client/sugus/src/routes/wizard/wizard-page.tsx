@@ -370,7 +370,10 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                                         .slice()
                                         .reverse()
                                         .map((section) => (
-                                            <div key={`section-${section.name}`}>
+                                            <div
+                                                key={`section-${section.name}`}
+                                                data-cy='answer-summary-item'
+                                            >
                                                 {getAnsweredQuestionForSection(section, answers)}
                                             </div>
                                         ))}

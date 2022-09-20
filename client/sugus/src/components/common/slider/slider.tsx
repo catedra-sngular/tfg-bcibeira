@@ -9,7 +9,7 @@ export const Slider = (props: ConnectionProps) => {
     };
 
     return (
-        <Carousel className='slider'>
+        <Carousel className='slider' data-cy='slider'>
             <Carousel.Item>
                 <div className='slider__item'>
                     <div className='slider__item__img'>

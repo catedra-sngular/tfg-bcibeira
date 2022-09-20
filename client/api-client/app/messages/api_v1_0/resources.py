@@ -15,11 +15,8 @@ user = ''
 address = ''
 password = ''
 
-# localPath = os.environ.get('LOCAL_STORE_PATH')
-# remotePath = os.environ.get('REMOTE_STORE_PATH')
-
-localPath = '/home/RED/bcibeira/Escritorio/'
-remotePath = 'endTest/server/pipe/resources/'
+localPath = os.environ.get('LOCAL_STORE_PATH')
+remotePath = os.environ.get('REMOTE_STORE_PATH')
 
 # Inicia un cliente SSH
 ssh_client = paramiko.SSHClient()
@@ -76,7 +73,7 @@ def obtainFolder():
     entrada, salida, error = ssh_client.exec_command('curl http://localhost:50000/api/v1.0/folder/')
     # Guardar la salida estándar
     output = salida.read().decode('unicode-escape').replace('"','').replace('\n','')
-    print(output)
+
     return output
 
 def readMessages(hash):
@@ -84,9 +81,7 @@ def readMessages(hash):
     # Ejecutar un comando de forma remota capturando entrada, salida y error estándar
     entrada, salida, error = ssh_client.exec_command(command)
     output = salida.read().decode('unicode-escape').replace('"','')
-    err = error.read().decode('unicode-escape').replace('"','')
-    print(output)
-    print(err)
+
     return output
 
 def storeFiles(folder):
@@ -112,7 +107,7 @@ class ConnectionResource(Resource):
                 if (not user or not address or not password):
                     openConn(conn_dict)
                 else:
-                    return 'Create conection is unavailable', 503
+                    return 'Create conection is not possible', 409
             if type == ConnType.CLOSE:
                 closeConn(conn_dict)
             if type != ConnType.OPEN & type != ConnType.CLOSE:

@@ -22,7 +22,11 @@ export const Continue = (props: ContinueProps) => {
 
     return (
         <div className='section__buttonset' ref={continueRef}>
-            <Button onClick={handleContinueButton} className='section__buttonset__button'>
+            <Button
+                data-cy='next-section-button'
+                onClick={handleContinueButton}
+                className='section__buttonset__button'
+            >
                 Next section
             </Button>
         </div>
