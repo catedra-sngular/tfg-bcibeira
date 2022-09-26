@@ -72,11 +72,8 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
     }, [isNewWizard]);
 
     const cleanWizard = () => {
-        // setSection(undefined);
-        // setSectionSummary(undefined);
         setSectionName(undefined);
         setAnswers([]);
-        // setIsComplete(false);
     };
 
     const handleCancelUpload = () => {
@@ -221,51 +218,6 @@ function WizardPage({ props, isNewWizard }: WizardPageProps) {
                             </div>
                         </div>
                     )}
-                    {/* {!section && (
-                        <div className='info-container'>
-                            <h1>Upload your config file</h1>
-                            <p>
-                                Upload your config file. Then you will edit and understand it better
-                            </p>
-                            <div className='my-3 files-selector d-flex flex-row'>
-                                <span className='mt-3 mr-4 d-flex flex-column'>
-                                    <input
-                                        ref={hiddenConfigFileInputRef}
-                                        className='hide_input_file'
-                                        type='file'
-                                        name='file'
-                                        onChange={(event) => {
-                                            if (event.target.files) {
-                                                setConfigFile(event.target?.files[0]);
-                                            }
-                                        }}
-                                    ></input>
-
-                                    <span>
-                                        <Button
-                                            className='button'
-                                            variant={configFile ? 'success' : 'secondary'}
-                                            onClick={() => {
-                                                handleSelectConfigFile(hiddenConfigFileInputRef);
-                                            }}
-                                        >
-                                            {configFile
-                                                ? 'Select another config file'
-                                                : 'Select config file'}
-                                        </Button>
-                                    </span>
-                                    {configFile && <p>Selected file: {configFile.name}</p>}
-                                </span>
-                            </div>
-                            {configFile && (
-                                <div className='mt-4 d-flex justify-content-center'>
-                                    <Button className='button' onClick={handleSubmission}>
-                                        Upload config file and start
-                                    </Button>
-                                </div>
-                            )}
-                        </div>
-                    )} */}
                     <Modal
                         show={showModal}
                         size='lg'

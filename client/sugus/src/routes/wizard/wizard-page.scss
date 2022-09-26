@@ -9,7 +9,6 @@
     height: calc(100% - 10rem);
     margin-bottom: 32px;
     width: auto;
-    // margin-left: 0; pone un margen de agún lado siempre
     margin-right: 0 !important;
     padding-right: 0 !important;
 
@@ -23,10 +22,8 @@
     .answers_container {
         flex-grow: 0;
         flex-shrink: 0;
-        //   flex-basis: 45rem;
         color: #000000 !important;
         padding: 2rem;
-        //   position: fixed;
         height: auto;
         overflow: auto;
         right: 0px;
