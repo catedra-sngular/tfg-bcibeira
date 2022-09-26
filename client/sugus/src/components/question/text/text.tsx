@@ -104,6 +104,7 @@ export const WizardQuestionText = (props: QuestionProps<QuestionText>) => {
                 <>
                     <div className='question-text__container'>
                         <Form.Control
+                            data-cy={question.key}
                             size='lg'
                             type='text'
                             placeholder='Large text'
@@ -116,6 +117,7 @@ export const WizardQuestionText = (props: QuestionProps<QuestionText>) => {
                         <div className='question-text__buttonset'>
                             <Button
                                 className='sugus-button'
+                                data-cy={`${question.key}-send-value`}
                                 disabled={
                                     disabled || minLengthError || maxLengthError || value === null
                                 }

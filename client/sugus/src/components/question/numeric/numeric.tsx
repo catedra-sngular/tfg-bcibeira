@@ -99,6 +99,7 @@ export const WizardQuestionNumeric = (props: QuestionProps<QuestionNumeric>) => 
                 <>
                     <div className='question-numeric__container'>
                         <Form.Control
+                            data-cy={question.key}
                             size='lg'
                             type='number'
                             autoFocus
@@ -110,6 +111,7 @@ export const WizardQuestionNumeric = (props: QuestionProps<QuestionNumeric>) => 
                         <div className='question-numeric__buttonset'>
                             <Button
                                 className='sugus__button'
+                                data-cy={`${question.key}-send-value`}
                                 disabled={
                                     value === null ||
                                     minError ||

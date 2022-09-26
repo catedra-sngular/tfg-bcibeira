@@ -127,6 +127,7 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                     .map((option: QuestionOption) => (
                         <Button
                             key={`${question.key}-${option.value}`}
+                            data-cy={question.key}
                             variant={
                                 answer && selectedOptions.includes(option.value)
                                     ? 'primary'
@@ -147,6 +148,7 @@ export const WizardQuestionCheckboxes = (props: QuestionProps<QuestionCheckboxes
                 <>
                     <Button
                         className='sugus__button'
+                        data-cy={`${question.key}-send-value`}
                         onClick={handleSendValue}
                         disabled={minError || maxError}
                     >
