@@ -1,3 +1,4 @@
+from shutil import ExecError
 from flask import request, Blueprint
 from flask_restful import Api, Resource
 
@@ -25,15 +26,40 @@ def openConn(params):
     # Establecer política por defecto para localizar la llave del host localmente
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     # Conectarse
-    ssh_client.connect(params['address'], 22, params['user'], params['password'])
+    stdin, stdout, stderr = ssh_client.connect(
+        params['address'],
+        22,
+        params['user'],
+        params['password'],
+        timeout=10
+    )
+
+    error = stderr.read().decode('utf-8')
+
+    if error:
+        print('Connection not possible. ', error)
+        raise ExecError
 
     global user, address, password
     user = params['user']
     address = params['address']
     password = params['password']
 
-def testConnection():
-    ssh_client.exec_command('ls')
+def isConnectionUp():
+
+    try:
+        stdin, stdout, stderr = ssh_client.exec_command('ls', timeout=5)
+        error = stderr.read().decode('utf-8')
+
+        if error:
+            print('Connection lost. ', error)
+            return False
+
+        print('UPPPPP')
+        return True
+    except Exception as e:
+        print('Connection lost. ', e)
+        return False
 
 def resetConnection():
     global user, address, password
@@ -98,6 +124,11 @@ def storeFiles(folder):
 
 class ConnectionResource(Resource):
     def post(self):
+        if (user and address):
+            if not isConnectionUp():
+                resetConnection()
+                return 'Connection Lost', 503
+
         data = request.get_json()
         conn_dict = conn_schema.load(data)
         type = conn_dict['connType']
@@ -114,16 +145,16 @@ class ConnectionResource(Resource):
                 return 'Parámetro de conexión no válido', 400
         except ValueError:
             return 'Credentials not correct', 401
+        except ExecError:
+            return 'Unreacheable host', 400
         except:
-            return 'Error de conexión', 500
+            resetConnection()
+            return 'Error interno', 500
         return 'OK', 200
 
     def get(self):
-
         if (user and address):
-            try:
-                testConnection()
-            except:
+            if not isConnectionUp():
                 resetConnection()
 
         response = {
@@ -135,19 +166,33 @@ class ConnectionResource(Resource):
 
 class FileResource(Resource):
     def post(self):
-        delay = request.form['delay']
-        folder = obtainFolder()
-        hash = folder[5:11]
+        if (user and address):
+            if not isConnectionUp():
+                resetConnection()
+                return 'Connection Lost', 503
 
-        configFilename, meshFilename = storeFiles(folder)
+        try:
+            delay = request.form['delay']
+            folder = obtainFolder()
+            hash = folder[5:11]
 
-        sendFile(configFilename, folder)
-        sendFile(meshFilename, folder)
-        notifyServer(configFilename, meshFilename, folder, delay)
+            configFilename, meshFilename = storeFiles(folder)
+
+            sendFile(configFilename, folder)
+            sendFile(meshFilename, folder)
+            notifyServer(configFilename, meshFilename, folder, delay)
+        except:
+            resetConnection()
+            return 'Error interno', 500
+
         return hash, 200
 
 class MessageResource(Resource):
     def get(self, hash):
+        if (user and address):
+            if not isConnectionUp():
+                resetConnection()
+                return 'Connection Lost', 503
         response = readMessages(hash)
         return response, 200
 

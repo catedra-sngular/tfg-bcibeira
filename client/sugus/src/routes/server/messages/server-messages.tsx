@@ -61,6 +61,16 @@ function ServerMessages({ props }: ServerMessagesProps) {
     }, []);
 
     useEffect(() => {
+        const isConnectionOwnerStorage = localStorage.getItem('isConnectionOwner');
+
+        if (isConnectionOwnerStorage === 'true') {
+            setIsConnectionOwner(true);
+        } else {
+            setIsConnectionOwner(false);
+        }
+    }, [props.connectionState.statusChangedOutside]);
+
+    useEffect(() => {
         props.connectionState.setConfigFile(configFile);
     }, [configFile]);
 
