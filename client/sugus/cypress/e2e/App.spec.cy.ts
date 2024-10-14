@@ -2,7 +2,7 @@ import { CONFIG_DATA } from './../samples/config_data';
 import { slowCypressDown } from 'cypress-slow-down';
 
 
-slowCypressDown(300)
+slowCypressDown(100)
 
 describe('New empty wizard', () => {
 
